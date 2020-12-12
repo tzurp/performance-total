@@ -1,11 +1,22 @@
-import PerformanceLog from "../../performance-project/main";
+import performanceLogMain from "../../performance-project/performance-log-main";
+
+beforeEach(() => {
+    console.log("Before hook");
+    performanceLogMain.initialize();
+});
+
+afterEach(() => {
+    console.log("Test finished");
+    performanceLogMain.performanceLogger.flush();
+});
 
 describe('suite-1', () => {
-   
+
     it('test_demo', () => {
-        //Main.performanceLogger.sampleStart("login");
-        const s = '{"name":"yoss", "id":171}';
-        const parsed =  JSON.parse(s);
-        console.log("The name is:" + parsed.name + "ID is: " +parsed.id);
+        console.log("Test Started");
+        performanceLogMain.sampleStart("Login");
+        browser.pause(1500);
+        performanceLogMain.sampleEnd("Loging");
+
     });
 });

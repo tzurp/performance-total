@@ -10,30 +10,40 @@ export class PerformanceLogger {
     }
 
     sampleStart(stepName: string) {
-        const sampleStart = this.getSample(StepType.Start, stepName);
+        const logEntry = this.setSample(StepType.Start, stepName);
 
-        this._storageCache._logEntries.push(sampleStart);
+        this._storageCache._startLogEntries.unshift(logEntry);
     }
 
     sampleEnd(stepName: string) {
-        const sampleStart = this.getSample(StepType.End, stepName);
+        const logEntry = this.setSample(StepType.End, stepName);
+
+        this._storageCache._endLogEntries.push(logEntry);
     }
 
     flush() {
+        // TODO: create performance log entries
         // TODO: write all data to file
         // TODO: clear cached data
     }
 
-    private getSample(stepType: StepType, stepName:string): LogEntry {
+    private setSample(stepType: StepType, stepName: string): LogEntry {
         const logEntry = new LogEntry();
-        
-        logEntry.name = stepName;
-        
+
+        if(stepType == StepType.Start) {
         logEntry.id = new IdGenerator().getId();
-        
+        }
+        else {
+            this._storageCache.getStartIdByStepName(stepName);
+        }
+
+        logEntry.name = stepName;
+
         logEntry.type = StepType.Start;
-        
+
         logEntry.time = new Date().getTime();
+
+        logEntry.displayTime = new Date().toLocaleString();
 
         return logEntry;
     }
