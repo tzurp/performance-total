@@ -1,22 +1,46 @@
 import performanceLogMain from "../../performance-project/performance-log-main";
+import randomize from "../../performance-project/dev-dep/randomize";
 
 beforeEach(() => {
     console.log("Before hook");
-    performanceLogMain.initialize();
+    performanceLogMain.initialize(true);
+    const x = performanceLogMain.outDir;
+
 });
 
 afterEach(() => {
     console.log("Test finished");
-    performanceLogMain.performanceLogger.flush();
+    performanceLogMain.finalize();
+    browser.reloadSession();
+});
+
+after(() => {
+    performanceLogMain.analyzeResults()
 });
 
 describe('suite-1', () => {
+    for (let i = 0; i < 3; i++) {
 
-    it('test_demo', () => {
-        console.log("Test Started");
-        performanceLogMain.sampleStart("Login");
-        browser.pause(1500);
-        performanceLogMain.sampleEnd("Loging");
+        it(`Test demo. Run ${i + 1}`, () => {
+            console.log("Test Started");
 
-    });
+            // Test Earnix website startup
+            performanceLogMain.sampleStart("Startup");
+            browser.url("https://earnix.com/");
+            performanceLogMain.sampleEnd("Startup");
+
+            // Test nested process
+            performanceLogMain.sampleStart("Wrap");
+
+            // Test weather API performance
+            performanceLogMain.sampleStart("WeatherAPI");
+            browser.url("http://www.7timer.info/bin/api.pl?lon=113.17&lat=23.09&product=astro&output=xml");
+            performanceLogMain.sampleEnd("WeatherAPI");
+
+            // Simulate additional task inside 'Wrap'
+            browser.pause(1000 + randomize.RandomPlusMinus(200));
+
+            performanceLogMain.sampleEnd("Wrap");
+        });
+    }
 });

@@ -1,6 +1,10 @@
+import crypto from "crypto";
+
 export class IdGenerator {
     getId(): string {
-        throw new Error("Method not implemented.");
+        const id = crypto.randomBytes(16).toString("hex");
+
+        return id;
     }
 
 }

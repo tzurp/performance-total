@@ -1,50 +1,50 @@
-import { LogEntry } from "./entities/log-entry";
+import { PartialLogEntry } from "./entities/partial-log-entry";
 import { PerformanceLogEntry } from "./entities/performance-log-entry";
+import fileWriter from "./helpers/file-writer";
 
 export class StorageCache {
-    _startLogEntries: Array<LogEntry>;
-    _endLogEntries: Array<LogEntry>;
+    _startLogEntries: Array<PartialLogEntry>;
+    _endLogEntries: Array<PartialLogEntry>;
     _performanceEntries: Array<PerformanceLogEntry>;
 
     constructor() {
-        this._startLogEntries = new Array<LogEntry>();
-        this._endLogEntries = new Array<LogEntry>();
+        this._startLogEntries = new Array<PartialLogEntry>();
+        this._endLogEntries = new Array<PartialLogEntry>();
         this._performanceEntries = new Array<PerformanceLogEntry>();
     }
 
-    createPerformanceEntry(): void {
-        for (let i = 0; i < this._startLogEntries.length; i++) {
-            const startEntry = this._startLogEntries[i];
-            
-            const endEntry = this._endLogEntries.find((e)=> e.id == startEntry.id);
+    createPerformanceEntries() {
+        const revStartEntries = this._startLogEntries.reverse();
 
-            if (endEntry) {
-                const performanceEntry = new PerformanceLogEntry();
+        revStartEntries.forEach(startEntry => {
+            const tempPerformanceEntry = new PerformanceLogEntry();
 
-                performanceEntry.id = endEntry.id;
-                performanceEntry.name = endEntry.name;
-                performanceEntry.startTime = startEntry.time;
-                performanceEntry.startDisplayTime = startEntry.displayTime;
-                performanceEntry.endTime = endEntry.time;
+            const correspondedEndEntry = this._endLogEntries.find((e) => e.id == startEntry.id);
 
-                this._performanceEntries.push(performanceEntry)
-                
-                break;
+            if (correspondedEndEntry) {
+                tempPerformanceEntry.id = startEntry.id;
+                tempPerformanceEntry.name = correspondedEndEntry.name;
+                tempPerformanceEntry.startDisplayTime = startEntry.displayTime;
+                tempPerformanceEntry.startTime = startEntry.time;
+                tempPerformanceEntry.endTime = correspondedEndEntry.time;
+                tempPerformanceEntry.duration = tempPerformanceEntry.getDuration();
+
+                this._performanceEntries.push(tempPerformanceEntry);
             }
-        }
+        });
     }
 
     getStartIdByStepName(stepName: string): string {
-        let id: string;
-        const startEntry = this._startLogEntries.find((entry)=> {entry.name == stepName});
+        let id = "";
 
-        if(!startEntry) {
-            id = "";
-        }
-        else {
+        const startEntry = this._startLogEntries.find((e) => e.name == stepName);
+
+        if (startEntry) {
             id = startEntry.id;
+
+            startEntry.name += "_used";
         }
-        
+
         return id;
     }
 
@@ -52,5 +52,15 @@ export class StorageCache {
         this._startLogEntries = [];
 
         this._endLogEntries = [];
+
+        this._performanceEntries = [];
+    }
+
+    writePerformanceDataToFile(fileName: string) {
+        this._performanceEntries.forEach(performanceEntry => {
+            fileWriter.appendLineToFile(fileName, `${JSON.stringify(performanceEntry)}\n`);
+        });;
+
+        this.clearData();
     }
 }

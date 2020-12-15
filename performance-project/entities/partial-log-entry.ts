@@ -1,4 +1,4 @@
-export class LogEntry {
+export class PartialLogEntry {
     name: string;
     id: string;
     type: StepType;

@@ -1,5 +1,6 @@
-import { LogEntry, StepType } from "./entities/log-entry";
+import { PartialLogEntry, StepType } from "./entities/partial-log-entry";
 import { IdGenerator } from "./helpers/id-generator";
+import { PerformanceAnalyzer } from "./performance-analyzer";
 import { StorageCache } from "./storage-cache";
 
 export class PerformanceLogger {
@@ -21,21 +22,32 @@ export class PerformanceLogger {
         this._storageCache._endLogEntries.push(logEntry);
     }
 
-    flush() {
-        // TODO: create performance log entries
-        // TODO: write all data to file
-        // TODO: clear cached data
+    flush(fileName: string) {
+        console.log("flushing to file: " + fileName);
+
+        this._storageCache.createPerformanceEntries();
+
+        this._storageCache.writePerformanceDataToFile(fileName);
     }
 
-    private setSample(stepType: StepType, stepName: string): LogEntry {
-        const logEntry = new LogEntry();
+    analyzeResults(sourceFileName: string, saveDataFilePath: string): void {
+        const analyzer = new PerformanceAnalyzer();
 
-        if(stepType == StepType.Start) {
-        logEntry.id = new IdGenerator().getId();
+        analyzer.analyze(sourceFileName, saveDataFilePath);
+    }
+
+    private setSample(stepType: StepType, stepName: string): PartialLogEntry {
+        let id = "";
+        const logEntry = new PartialLogEntry();
+
+        if (stepType as number === StepType.Start as number) {
+            id = new IdGenerator().getId();
         }
         else {
-            this._storageCache.getStartIdByStepName(stepName);
+            id = this._storageCache.getStartIdByStepName(stepName);
         }
+
+        logEntry.id = id;
 
         logEntry.name = stepName;
 
