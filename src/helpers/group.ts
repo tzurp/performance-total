@@ -1,4 +1,4 @@
-class HelperMethods {
+class Group {
     groupBy<T,K>(list: T[], getKey: (item: T) => K ) {
         const map = new Map<K,T[]>();
         list.forEach((item) => {
@@ -13,4 +13,4 @@ class HelperMethods {
         return Array.from(map.values());
     }
 }
-export default new HelperMethods();
+export default new Group();

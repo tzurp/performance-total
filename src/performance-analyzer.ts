@@ -2,9 +2,8 @@ import { PerformanceLogEntry } from "./entities/performance-log-entry";
 import { PerformanceResult } from "./entities/performance-result";
 import calculator from "./helpers/calculator";
 import fileWriter from "./helpers/file-writer";
-import helperMethods from "./helpers/helper-methods";
+import helperMethods from "./helpers/group";
 import ObjectsToCsv from 'objects-to-csv';
-import path from "path";
 
 export class PerformanceAnalyzer {
     _performanceResults: Array<PerformanceResult>;

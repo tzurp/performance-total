@@ -1,14 +1,15 @@
 {
-  "name": "performance",
+  "name": "performance-total",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "demo": "tsc --build && wdio wdio.conf.js ./node_modules/.bin/"
   },
   "keywords": [],
-  "author": "",
+  "author": "Tzur Paldi",
   "license": "ISC",
   "devDependencies": {
     "@types/mocha": "^8.2.0",

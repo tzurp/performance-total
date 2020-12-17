@@ -1,5 +1,5 @@
-import performanceLogMain from "../../performance-project/performance-log-main";
-import randomize from "../../performance-project/dev-dep/randomize";
+import performanceLogMain from "../../src/performance-total";
+import randomize from "../../src/dev-dep/randomize";
 
 beforeEach(() => {
     console.log("Before hook");

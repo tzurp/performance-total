@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import fileWriter from "./helpers/file-writer";
 
-class PerformanceLogMain {
+class PerformanceTotal {
     private _outDir: string;
     logFileName = "performance-log.txt";
     performanceResultsFileName = "performance-results";
@@ -63,4 +63,4 @@ class PerformanceLogMain {
         return dirPath;
     }
 }
-export default new PerformanceLogMain();
+export default new PerformanceTotal();

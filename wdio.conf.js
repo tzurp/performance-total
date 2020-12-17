@@ -17,7 +17,7 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './out/test/specs/**/*.js'
+        './dist/test/specs/**/*.js'
     ],
     // Patterns to exclude.
     exclude: [
