@@ -2,8 +2,9 @@
   "name": "performance-total",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "build/app.js",
+  "types": "build/app.d.ts",
+  "files": ["/build/src", "app.d.ts"],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "demo": "tsc --build && wdio wdio.conf.js ./node_modules/.bin/"
