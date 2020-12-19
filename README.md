@@ -1,2 +1,2 @@
-# performance-log
-This is a TS/JS project for performance logger utility
+# performance-Total
+This is a TS/JS performance utility for automation testing
