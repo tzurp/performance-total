@@ -4,7 +4,7 @@ import fs from "fs";
 import fileWriter from "./helpers/file-writer";
 
 class PerformanceTotal {
-    private _outDir: string;
+    private _resultsDir: string;
     logFileName = "performance-log.txt";
     performanceResultsFileName = "performance-results";
     performanceLogger: PerformanceLogger;
@@ -12,11 +12,11 @@ class PerformanceTotal {
     constructor(appendToExistingFile = false) {
         this.performanceLogger = new PerformanceLogger();
         
-        this._outDir = this.getOutDir();
+        this._resultsDir = this.getResultsDir();
     }
 
     get outDir(): string {
-        return this._outDir;
+        return this._resultsDir;
     }
 
     sampleStart(stepName: string) {
@@ -30,7 +30,7 @@ class PerformanceTotal {
     initialize(appendToExistingFile = false): void { 
         const initObj = JSON.stringify({"startDisplayTime" : new Date().toLocaleString()});
 
-        const fileName = path.join(this._outDir, this.logFileName);
+        const fileName = path.join(this._resultsDir, this.logFileName);
         
         if(!appendToExistingFile) {
         fileWriter.writeToFile(fileName, `${initObj}\n`);
@@ -49,12 +49,18 @@ class PerformanceTotal {
     }
 
     private getFilePath(fileName: string): string {
-        return path.join(this._outDir, fileName)
+        return path.join(this._resultsDir, fileName)
     }
 
-    private getOutDir(): string {
+    private getResultsDir(): string {
         const resultsDir = "performance-results";
-        const dirPath = path.join(__dirname, resultsDir);
+        const root = require.main?.paths[0].split('node_modules')[0].slice(0, -1);
+        
+        console.log(`Root path = ${root}`);
+
+        if (!root) {throw new Error("Can't get root folder")}
+
+        const dirPath = path.join( root, resultsDir);
 
         if (!fs.existsSync(dirPath)){
             fs.mkdirSync(dirPath);
