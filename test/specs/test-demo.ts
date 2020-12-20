@@ -1,8 +1,8 @@
 import randomize from "../../dev-dep/randomize";
-import performancetotal from "../../app";
+import {performancetotal} from "../../app";
+
 beforeEach(() => {
     console.log("Before hook");
-
     performancetotal.initialize(true);
 });
 

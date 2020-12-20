@@ -3,14 +3,18 @@ class Calculator {
     {
         const mean = this.getAverageTimeSpan(durationList);
         let sos = 0;
+        let sem = 0;
 
+        // calculate sem
+        if(durationList.length > 1) {
         durationList.forEach(d => sos += Math.pow(d - mean, 2));
 
-        var std = Math.sqrt(sos / (durationList.length - 1));
+        const std = Math.sqrt(sos / (durationList.length - 1));
 
-        var ste = std / Math.sqrt(durationList.length);
+        sem = std / Math.sqrt(durationList.length);
+        }
 
-        return [mean, ste];
+        return [mean, sem];
     }
 
     private getAverageTimeSpan(durationList: Array<number>): number

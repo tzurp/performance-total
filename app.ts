@@ -1,4 +1,5 @@
 
 import performancetotal from "./src/performance-total";
-
-export default performancetotal;
+import PerformanceTotalService from "./src/service";
+export default PerformanceTotalService;
+export {performancetotal};
