@@ -13,7 +13,7 @@ export default class PerformanceTotalService {
      *
      * the `serviceOptions` parameter will be: `{ foo: 'bar' }`
      */
-    constructor(serviceOptions: { appendToExistingFile: boolean } = { appendToExistingFile: true }, capabilities: any, config: any, browser: WebdriverIO.BrowserObject) {
+    constructor(serviceOptions: { appendToExistingFile: boolean }, capabilities: any, config: any, browser: WebdriverIO.BrowserObject) {
         this.browser = browser
         this._serviceOptions = serviceOptions;
     }
