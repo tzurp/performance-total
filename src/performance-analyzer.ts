@@ -46,7 +46,7 @@ export class PerformanceAnalyzer {
     }
 
     private async serializeData(saveDataFilePath: string) {
-        const jsonDataFilePath = saveDataFilePath + ".txt";
+        const jsonDataFilePath = saveDataFilePath + ".json";
         
         fileWriter.appendLineToFile(jsonDataFilePath, JSON.stringify(this._performanceResults));
 
