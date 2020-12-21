@@ -22,18 +22,18 @@ export class PerformanceLogger {
         this._storageCache._endLogEntries.push(logEntry);
     }
 
-    flush(fileName: string) {
-        console.log("flushing to file: " + fileName);
+    flush(fileName: string, isTestPassed: boolean) {
+        console.log("Performance-Total: flushing to file: " + fileName);
 
-        this._storageCache.createPerformanceEntries();
+        this._storageCache.createPerformanceEntries(isTestPassed);
 
         this._storageCache.writePerformanceDataToFile(fileName);
     }
 
-    analyzeResults(sourceFileName: string, saveDataFilePath: string): void {
+    analyzeResults(sourceLogFileName: string, saveResultsFilePath: string, dropResultsFromFailedTest: boolean | undefined): void {
         const analyzer = new PerformanceAnalyzer();
 
-        analyzer.analyze(sourceFileName, saveDataFilePath);
+        analyzer.analyze(sourceLogFileName, saveResultsFilePath, dropResultsFromFailedTest);
     }
 
     private setSample(stepType: StepType, stepName: string): PartialLogEntry {

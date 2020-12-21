@@ -6,6 +6,7 @@ export class PerformanceLogEntry {
     startDisplayTime: string;
 
     duration: number;
+    isTestPassed: boolean;
 
     constructor() {
         this.name = "";
@@ -14,6 +15,7 @@ export class PerformanceLogEntry {
         this.endTime = 0;
         this.startDisplayTime = "";
         this.duration = 0;
+        this.isTestPassed = true;
     }
 
     getDuration(): number {

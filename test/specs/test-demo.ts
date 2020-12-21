@@ -8,7 +8,7 @@ beforeEach(() => {
 
 afterEach(() => {
     console.log("Test finished");
-    performancetotal.finalize();
+    performancetotal.finalize(true);
     browser.reloadSession();
 });
 

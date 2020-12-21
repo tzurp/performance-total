@@ -6,12 +6,12 @@ import fileWriter from "./helpers/file-writer";
 class PerformanceTotal {
     private _resultsDir: string;
     logFileName = "performance-log.txt";
-    performanceResultsFileName = "performance-results";
+    _performanceResultsFileName = "performance-results";
     performanceLogger: PerformanceLogger;
-    
+
     constructor(appendToExistingFile = false) {
         this.performanceLogger = new PerformanceLogger();
-        
+
         this._resultsDir = this.getResultsDir();
     }
 
@@ -27,25 +27,35 @@ class PerformanceTotal {
         this.performanceLogger.sampleEnd(stepName);;
     }
 
-    initialize(appendToExistingFile = false): void { 
-        const initObj = JSON.stringify({"startDisplayTime" : new Date().toLocaleString()});
+    initialize(disableAppendToExistingFile: boolean): void {
+        const initObj = JSON.stringify({ "startDisplayTime": new Date().toLocaleString() });
 
         const fileName = path.join(this._resultsDir, this.logFileName);
-        
-        if(!appendToExistingFile) {
-        fileWriter.writeToFile(fileName, `${initObj}\n`);
+
+        if (disableAppendToExistingFile) {
+            fileWriter.writeToFile(fileName, `${initObj}\n`);
         }
         else {
             fileWriter.appendLineToFile(fileName, `${initObj}\n`);
         }
     }
 
-    finalize(): void {
-        this.performanceLogger.flush(this.getFilePath(this.logFileName));
+    /**
+     * 
+     * @param isTestPassed 
+     */
+    finalize(isTestPassed: boolean): void {
+        this.performanceLogger.flush(this.getFilePath(this.logFileName), isTestPassed);
     }
 
-    analyzeResults() {
-        this.performanceLogger.analyzeResults(this.getFilePath(this.logFileName), this.getFilePath(this.performanceResultsFileName));
+    analyzeResults(performanceResultsFileName?: string, dropResultsFromFailedTest?: boolean) {
+        let resultsFileName = this._performanceResultsFileName;
+
+        if(performanceResultsFileName) {
+            resultsFileName = performanceResultsFileName;
+        }
+
+        this.performanceLogger.analyzeResults(this.getFilePath(this.logFileName), this.getFilePath(resultsFileName), dropResultsFromFailedTest);
     }
 
     private getFilePath(fileName: string): string {
@@ -55,14 +65,14 @@ class PerformanceTotal {
     private getResultsDir(): string {
         const resultsDir = "performance-results";
         const root = require.main?.paths[0].split('node_modules')[0].slice(0, -1);
-        
+
         console.log(`Root path = ${root}`);
 
-        if (!root) {throw new Error("Can't get root folder")}
+        if (!root) { throw new Error("Can't get root folder") }
 
-        const dirPath = path.join( root, resultsDir);
+        const dirPath = path.join(root, resultsDir);
 
-        if (!fs.existsSync(dirPath)){
+        if (!fs.existsSync(dirPath)) {
             fs.mkdirSync(dirPath);
         }
 

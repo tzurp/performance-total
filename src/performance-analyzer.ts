@@ -12,10 +12,17 @@ export class PerformanceAnalyzer {
         this._performanceResults = new Array<PerformanceResult>();
     }
 
-    analyze(logFileName: string, saveDataFilePath: string): void {
+    analyze(logFileName: string, saveDataFilePath: string, dropResultsFromFailedTest: boolean | undefined): void {
         const performanceLogEntries = this.deserializeData(logFileName);
+        let groupedResults: PerformanceLogEntry[][];
 
-        const groupedResults = helperMethods.groupBy(performanceLogEntries, p => p.name);
+        if(!dropResultsFromFailedTest) {
+            groupedResults = helperMethods.groupBy(performanceLogEntries, p => p.name);
+        }
+        else {
+            const entriesWithTestPass = performanceLogEntries.filter((e) => e.isTestPassed === true);
+            groupedResults = helperMethods.groupBy(entriesWithTestPass, p => p.name);
+        }
 
         groupedResults.forEach(group => {
             const durationList = group.map(t => t.duration);

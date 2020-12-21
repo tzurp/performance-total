@@ -13,7 +13,7 @@ export class StorageCache {
         this._performanceEntries = new Array<PerformanceLogEntry>();
     }
 
-    createPerformanceEntries() {
+    createPerformanceEntries(isTestPassed: boolean) {
         const revStartEntries = this._startLogEntries.reverse();
 
         revStartEntries.forEach(startEntry => {
@@ -28,6 +28,7 @@ export class StorageCache {
                 tempPerformanceEntry.startTime = startEntry.time;
                 tempPerformanceEntry.endTime = correspondedEndEntry.time;
                 tempPerformanceEntry.duration = tempPerformanceEntry.getDuration();
+                tempPerformanceEntry.isTestPassed = isTestPassed;
 
                 this._performanceEntries.push(tempPerformanceEntry);
             }

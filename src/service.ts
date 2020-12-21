@@ -2,7 +2,7 @@ import performanceTotal from "./performance-total";
 
 export default class PerformanceTotalService {
     browser: WebdriverIO.BrowserObject;
-    _serviceOptions: { appendToExistingFile: boolean };
+    _serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean };
     /**
      * `serviceOptions` contains all options specific to the service
      * e.g. if defined as follows:
@@ -13,32 +13,24 @@ export default class PerformanceTotalService {
      *
      * the `serviceOptions` parameter will be: `{ foo: 'bar' }`
      */
-    constructor(serviceOptions: { appendToExistingFile: boolean }, capabilities: any, config: any, browser: WebdriverIO.BrowserObject) {
+    constructor(serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean }, capabilities: any, config: any, browser: WebdriverIO.BrowserObject) {
         this.browser = browser
         this._serviceOptions = serviceOptions;
     }
 
     before(config: any, capabilities: any) {
-        // TODO: something before all tests are run, e.g.:
-        console.log("Hook BEFORE ALL TESTS");
+        // before all tests run
     }
 
     beforeTest(test: any, context: any) {
-        console.log("Hook BEFORE test");
-
-        performanceTotal.initialize(this._serviceOptions.appendToExistingFile);
+        performanceTotal.initialize(this._serviceOptions.disableAppendToExistingFile);
     }
 
     afterTest(test: any, context: any, { error, result, duration, passed, retries }: any) {
-        console.log("Hook AFTER test");
-        performanceTotal.finalize();
+        performanceTotal.finalize(passed);
     }
 
     after(exitCode: any, config: any, capabilities: any) {
-        // TODO: something after all tests are run
-        console.log("Hook AFTER ALL tests are run");
-        performanceTotal.analyzeResults();
+        performanceTotal.analyzeResults(this._serviceOptions.performanceResultsFileName, this._serviceOptions.dropResultsFromFailedTest);
     }
-
-    // other hooks or custom service methods ...
 }
