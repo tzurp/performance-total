@@ -12,6 +12,7 @@ npm install performancetotal --save-dev
 <h2>Usage</h2>
 
 Add wdio-performancetotal-service to your `wdio.conf.js`:
+
 ```
 exports.config = {
   // ...
@@ -20,6 +21,7 @@ exports.config = {
 };
 ```
 ...or with the service options:
+
 ```
 exports.config = {
   // ...
@@ -35,7 +37,9 @@ exports.config = {
   // ...
 };
 ```
+
 <h2>Usage in test</h2>
+
 ```
 it("should test github startup performance", () => {
             // ...
@@ -46,8 +50,8 @@ it("should test github startup performance", () => {
             performancetotal.sampleEnd("Startup");
             //...
         });
-        
 ```
+
 Of course you need to run the test several times to increase the samples population.
 
 <h2>Getting the results</h2>
