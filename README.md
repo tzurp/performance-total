@@ -1,5 +1,5 @@
 # performance-total
-With this plugin for [webdriver.io](https://webdriver.io/) you can easily add performance analysis to any flow of your tests.
+With this plugin for [webdriver.io](https://webdriver.io/) you can easily add performance analysis to any flow in your tests.
 
 <h2>Installation</h2>
 Install this module locally with the following command to be used as a (dev-)dependency:
@@ -40,7 +40,11 @@ exports.config = {
 
 <h2>Usage in test</h2>
 
+Just import <b>performancetotal</b> where you need it, whether it be your test file or any other class:
+
 ```
+import { performancetotal } from "wdio-performancetotal-service";
+
 it("should test github startup performance", () => {
             // ...
             performancetotal.sampleStart("Startup");
