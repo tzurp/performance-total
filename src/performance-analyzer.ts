@@ -31,10 +31,10 @@ export class PerformanceAnalyzer {
             const avgAndSte = calculator.getAverageAndStandardDeviation(durationList);
 
             performanceResult.name = group[0].name;
-            performanceResult.earliestDateTime = group[0].startDisplayTime;
-            performanceResult.latestDateTime = group[group.length -1].startDisplayTime;
+            performanceResult.earliestTime = group[0].startDisplayTime;
+            performanceResult.latestTime = group[group.length -1].startDisplayTime;
             performanceResult.averageTime = avgAndSte[0];
-            performanceResult.standardError = avgAndSte[1];
+            performanceResult.sem = avgAndSte[1];
             performanceResult.repeats = durationList.length;
             performanceResult.minValue = Math.min(...durationList);
             performanceResult.maxValue = Math.max(...durationList);

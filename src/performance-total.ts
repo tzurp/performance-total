@@ -5,9 +5,9 @@ import fileWriter from "./helpers/file-writer";
 
 class PerformanceTotal {
     private _resultsDir: string;
-    logFileName = "performance-log.txt";
-    _performanceResultsFileName = "performance-results";
-    performanceLogger: PerformanceLogger;
+    private logFileName = "performance-log.txt";
+    private _performanceResultsFileName = "performance-results";
+    private performanceLogger: PerformanceLogger;
 
     constructor(appendToExistingFile = false) {
         this.performanceLogger = new PerformanceLogger();
