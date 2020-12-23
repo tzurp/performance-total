@@ -46,6 +46,7 @@ it("should test github startup performance", () => {
             performancetotal.sampleEnd("Startup");
             //...
         });
+        
 ```
 Of course you need to run the test several times to increase the samples population.
 
