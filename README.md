@@ -55,7 +55,9 @@ it("should test github startup performance", () => {
 Of course you need to run the test several times to increase the samples population.
 
 <h2>Getting the results</h2>
+
 A new directory named `performance-results` is created in your project's root folder and when all the tests are completed two files are created inside it: `performance-results.json` and `performance-results.csv` with the analyzed data including: average time, standard error of mean,  (sem), number of samples, min value, max value, earliest time and latest time.
 
 <h2>Typescript support</h2>
+
 Typescript is supported for this plugin.
