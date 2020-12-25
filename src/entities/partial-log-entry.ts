@@ -3,7 +3,8 @@ export class PartialLogEntry {
     id: string;
     type: StepType;
     time: number;
-    displayTime: string
+    displayTime: string;
+    instanceId: string;
 
     constructor() {
         this.name = "";
@@ -11,6 +12,7 @@ export class PartialLogEntry {
         this.type = StepType.Start;
         this.time = 0;
         this.displayTime = "";
+        this.instanceId = "";
     }
 }
 

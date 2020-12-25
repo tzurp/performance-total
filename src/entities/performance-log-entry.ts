@@ -1,6 +1,7 @@
 export class PerformanceLogEntry {
     name: string;
     id: string;
+    instanceId: string;
     startTime: number;
     endTime: number;
     startDisplayTime: string;
@@ -11,6 +12,7 @@ export class PerformanceLogEntry {
     constructor() {
         this.name = "";
         this.id = "";
+        this.instanceId = "";
         this.startTime = 0;
         this.endTime = 0;
         this.startDisplayTime = "";

@@ -2,14 +2,18 @@ import { PerformanceLogger } from "./performance-logger";
 import path from "path";
 import fs from "fs";
 import fileWriter from "./helpers/file-writer";
+import { IdGenerator } from "./helpers/id-generator";
 
 class PerformanceTotal {
+    private _instanceid: string;
     private _resultsDir: string;
     private logFileName = "performance-log.txt";
     private _performanceResultsFileName = "performance-results";
     private performanceLogger: PerformanceLogger;
 
     constructor(appendToExistingFile = false) {
+        this._instanceid = new IdGenerator().getId("inst");
+
         this.performanceLogger = new PerformanceLogger();
 
         this._resultsDir = this.getResultsDir();
@@ -20,23 +24,23 @@ class PerformanceTotal {
     }
 
     sampleStart(stepName: string) {
-        this.performanceLogger.sampleStart(stepName);
+        this.performanceLogger.sampleStart(stepName, this._instanceid);
     }
 
     sampleEnd(stepName: string) {
-        this.performanceLogger.sampleEnd(stepName);;
+        this.performanceLogger.sampleEnd(stepName, this._instanceid);
     }
 
-    initialize(disableAppendToExistingFile: boolean): void {
+    async initialize(disableAppendToExistingFile: boolean): Promise<void> {
         const initObj = JSON.stringify({ "startDisplayTime": new Date().toLocaleString() });
 
         const fileName = path.join(this._resultsDir, this.logFileName);
 
         if (disableAppendToExistingFile) {
-            fileWriter.writeToFile(fileName, `${initObj}\n`);
+            await fileWriter.writeToFile(fileName, `${initObj}\n`);
         }
         else {
-            fileWriter.appendLineToFile(fileName, `${initObj}\n`);
+            await fileWriter.appendLineToFile(fileName, `${initObj}\n`);
         }
     }
 

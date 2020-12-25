@@ -23,6 +23,7 @@ export class StorageCache {
 
             if (correspondedEndEntry) {
                 tempPerformanceEntry.id = startEntry.id;
+                tempPerformanceEntry.instanceId = startEntry.instanceId;
                 tempPerformanceEntry.name = correspondedEndEntry.name;
                 tempPerformanceEntry.startDisplayTime = startEntry.displayTime;
                 tempPerformanceEntry.startTime = startEntry.time;
@@ -35,10 +36,10 @@ export class StorageCache {
         });
     }
 
-    getStartIdByStepName(stepName: string): string {
+    getStartIdByStepName(stepName: string, instanceId: string): string {
         let id = "";
 
-        const startEntry = this._startLogEntries.find((e) => e.name == stepName);
+        const startEntry = this._startLogEntries.find((e) => e.name == stepName && e.instanceId == instanceId);
 
         if (startEntry) {
             id = startEntry.id;
@@ -49,7 +50,7 @@ export class StorageCache {
         return id;
     }
 
-    clearData() {
+    clearData(): void {
         this._startLogEntries = [];
 
         this._endLogEntries = [];
@@ -57,9 +58,9 @@ export class StorageCache {
         this._performanceEntries = [];
     }
 
-    writePerformanceDataToFile(fileName: string) {
-        this._performanceEntries.forEach(performanceEntry => {
-            fileWriter.appendLineToFile(fileName, `${JSON.stringify(performanceEntry)}\n`);
+    writePerformanceDataToFile(fileName: string): void {
+        this._performanceEntries.forEach(async performanceEntry => {
+            await fileWriter.appendLineToFile(fileName, `${JSON.stringify(performanceEntry)}\n`);
         });;
 
         this.clearData();

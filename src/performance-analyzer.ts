@@ -12,11 +12,11 @@ export class PerformanceAnalyzer {
         this._performanceResults = new Array<PerformanceResult>();
     }
 
-    analyze(logFileName: string, saveDataFilePath: string, dropResultsFromFailedTest: boolean | undefined): void {
-        const performanceLogEntries = this.deserializeData(logFileName);
+    async analyze(logFileName: string, saveDataFilePath: string, dropResultsFromFailedTest: boolean | undefined): Promise<void> {
+        const performanceLogEntries = await this.deserializeData(logFileName);
         let groupedResults: PerformanceLogEntry[][];
 
-        if(!dropResultsFromFailedTest) {
+        if (!dropResultsFromFailedTest) {
             groupedResults = helperMethods.groupBy(performanceLogEntries, p => p.name);
         }
         else {
@@ -32,39 +32,43 @@ export class PerformanceAnalyzer {
 
             performanceResult.name = group[0].name;
             performanceResult.earliestTime = group[0].startDisplayTime;
-            performanceResult.latestTime = group[group.length -1].startDisplayTime;
+            performanceResult.latestTime = group[group.length - 1].startDisplayTime;
             performanceResult.averageTime = avgAndSte[0];
             performanceResult.sem = avgAndSte[1];
             performanceResult.repeats = durationList.length;
             performanceResult.minValue = Math.min(...durationList);
             performanceResult.maxValue = Math.max(...durationList);
-            
+
             this._performanceResults.push(performanceResult);
         });
+
+        const picked = this._performanceResults.map(({ name, averageTime, sem, repeats, minValue, maxValue }) => ({ name, averageTime, sem, repeats, minValue, maxValue }))
+        console.log("\nperformancetotal results:\n")
+        console.table(picked);
 
         this.serializeData(saveDataFilePath);
     }
 
     private async serializeData(saveDataFilePath: string) {
         const jsonDataFilePath = saveDataFilePath + ".json";
-        
-        fileWriter.appendLineToFile(jsonDataFilePath, JSON.stringify(this._performanceResults));
+
+        await fileWriter.appendLineToFile(jsonDataFilePath, JSON.stringify(this._performanceResults));
 
         // write to csv
-        const csv = new ObjectsToCsv( this._performanceResults);
+        const csv = new ObjectsToCsv(this._performanceResults);
 
         const csvString = await csv.toString(true);
 
-        fileWriter.writeToFile(saveDataFilePath + ".csv", csvString);
+        await fileWriter.writeToFile(saveDataFilePath + ".csv", csvString);
     }
 
-    private deserializeData(fileName: string): Array<PerformanceLogEntry> {
+    private async deserializeData(fileName: string): Promise<Array<PerformanceLogEntry>> {
         const resultsArray = new Array<PerformanceLogEntry>();
 
-        const textResultsArray = fileWriter.readAllLines(fileName);
+        const textResultsArray = await fileWriter.readAllLines(fileName);
 
         textResultsArray.forEach(textResult => {
-            if (textResult != "" ) {
+            if (textResult != "") {
                 const performanceResult = JSON.parse(textResult) as PerformanceLogEntry;
 
                 if (performanceResult.id !== undefined) {

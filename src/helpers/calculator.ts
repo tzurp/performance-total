@@ -14,12 +14,14 @@ class Calculator {
         sem = std / Math.sqrt(durationList.length);
         }
 
-        return [mean, sem];
+        return [Math.round(mean), Math.round(sem)];
     }
 
     private getAverageTimeSpan(durationList: Array<number>): number
     {
-        return durationList.reduce((a, b) => a + b, 0) / durationList.length;
+        const result =  durationList.reduce((a, b) => a + b, 0) / durationList.length;
+
+        return Math.round(result);
     }
 }
 export default new Calculator();

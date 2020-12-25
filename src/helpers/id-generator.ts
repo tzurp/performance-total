@@ -1,10 +1,15 @@
 import crypto from "crypto";
 
 export class IdGenerator {
-    getId(): string {
+    getId(prefix?: string): string {
+        let init = "";
+
+        if(prefix) {
+            init = prefix;
+        }
+
         const id = crypto.randomBytes(16).toString("hex");
 
-        return id;
+        return init + id;
     }
-
 }

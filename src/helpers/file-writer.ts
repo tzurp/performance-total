@@ -1,4 +1,4 @@
-import fs from "fs";
+import {promises as fs} from "fs";
 
 
 class FileWriter {
@@ -8,18 +8,18 @@ class FileWriter {
      * @param filePath 
      * @param content 
      */
-    writeToFile(filePath: string, content: string): void {
-        fs.writeFileSync(filePath, content);
+    async writeToFile(filePath: string, content: string): Promise<void> {
+        await fs.writeFile(filePath, content);
 
         console.log("File write successful");
     }
 
-    appendLineToFile(filePath: string, lineContent: string): void {
-        fs.appendFileSync(filePath, lineContent);
+    async appendLineToFile(filePath: string, lineContent: string): Promise<void> {
+        await fs.appendFile(filePath, lineContent);
     }
 
-    readAllLines(filePath: string): Array<string> {
-        const data = fs.readFileSync(filePath, "utf-8");
+    async readAllLines(filePath: string): Promise<Array<string>> {
+        const data = await fs.readFile(filePath, "utf-8");
 
         const stringArray = data.split("\n");
 

@@ -22,8 +22,8 @@ export default class PerformanceTotalService {
         // before all tests run
     }
 
-    beforeTest(test: any, context: any) {
-        performanceTotal.initialize(this._serviceOptions.disableAppendToExistingFile);
+    async beforeTest(test: any, context: any) {
+        await performanceTotal.initialize(this._serviceOptions.disableAppendToExistingFile);
     }
 
     afterTest(test: any, context: any, { error, result, duration, passed, retries }: any) {

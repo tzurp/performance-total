@@ -10,14 +10,14 @@ export class PerformanceLogger {
         this._storageCache = new StorageCache();
     }
 
-    sampleStart(stepName: string) {
-        const logEntry = this.setSample(StepType.Start, stepName);
+    sampleStart(stepName: string, instanceId: string) {
+        const logEntry = this.setSample(StepType.Start, stepName, instanceId);
 
         this._storageCache._startLogEntries.unshift(logEntry);
     }
 
-    sampleEnd(stepName: string) {
-        const logEntry = this.setSample(StepType.End, stepName);
+    sampleEnd(stepName: string, instanceId: string) {
+        const logEntry = this.setSample(StepType.End, stepName, instanceId);
 
         this._storageCache._endLogEntries.push(logEntry);
     }
@@ -30,13 +30,13 @@ export class PerformanceLogger {
         this._storageCache.writePerformanceDataToFile(fileName);
     }
 
-    analyzeResults(sourceLogFileName: string, saveResultsFilePath: string, dropResultsFromFailedTest: boolean | undefined): void {
+    async analyzeResults(sourceLogFileName: string, saveResultsFilePath: string, dropResultsFromFailedTest: boolean | undefined): Promise<void> {
         const analyzer = new PerformanceAnalyzer();
 
-        analyzer.analyze(sourceLogFileName, saveResultsFilePath, dropResultsFromFailedTest);
+        await analyzer.analyze(sourceLogFileName, saveResultsFilePath, dropResultsFromFailedTest);
     }
 
-    private setSample(stepType: StepType, stepName: string): PartialLogEntry {
+    private setSample(stepType: StepType, stepName: string, instanceId: string): PartialLogEntry {
         let id = "";
         const logEntry = new PartialLogEntry();
 
@@ -44,10 +44,12 @@ export class PerformanceLogger {
             id = new IdGenerator().getId();
         }
         else {
-            id = this._storageCache.getStartIdByStepName(stepName);
+            id = this._storageCache.getStartIdByStepName(stepName, instanceId);
         }
 
         logEntry.id = id;
+
+        logEntry.instanceId = instanceId;
 
         logEntry.name = stepName;
 
