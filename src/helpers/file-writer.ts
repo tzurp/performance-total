@@ -1,5 +1,4 @@
-import {promises as fs} from "fs";
-
+import { promises as fs } from "fs";
 
 class FileWriter {
 
@@ -9,17 +8,32 @@ class FileWriter {
      * @param content 
      */
     async writeToFile(filePath: string, content: string): Promise<void> {
-        await fs.writeFile(filePath, content);
-
-        console.log("File write successful");
+        try {
+            await fs.writeFile(filePath, content);
+        }
+        catch (err) {
+            console.log(`performancetotal error: writeFile failed: ${err}`);
+        }
     }
 
     async appendLineToFile(filePath: string, lineContent: string): Promise<void> {
-        await fs.appendFile(filePath, lineContent);
+        try {
+            await fs.appendFile(filePath, lineContent);
+        }
+        catch (err) {
+            console.log(`performancetotal error: appendFile failed: ${err}`);
+        }
     }
 
     async readAllLines(filePath: string): Promise<Array<string>> {
-        const data = await fs.readFile(filePath, "utf-8");
+        let data = "";
+
+        try {
+            data = await fs.readFile(filePath, "utf-8");
+        }
+        catch (err) {
+            console.log(`performancetotal error: readFile failed: ${err}`);
+        }
 
         const stringArray = data.split("\n");
 

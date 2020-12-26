@@ -31,6 +31,10 @@ class PerformanceTotal {
         this.performanceLogger.sampleEnd(stepName, this._instanceid);
     }
 
+    /**
+     * @deprecated Don't use this method if *wdio-performancetotal-service* is enabled.
+     * @param disableAppendToExistingFile If true, existing performance data will be overwritten for each test suite.
+     */
     async initialize(disableAppendToExistingFile: boolean): Promise<void> {
         const initObj = JSON.stringify({ "startDisplayTime": new Date().toLocaleString() });
 
@@ -45,13 +49,18 @@ class PerformanceTotal {
     }
 
     /**
-     * 
+     * @deprecated Don't use this method if *wdio-performancetotal-service* is enabled.
      * @param isTestPassed 
      */
     finalize(isTestPassed: boolean): void {
         this.performanceLogger.flush(this.getFilePath(this.logFileName), isTestPassed);
     }
 
+    /**
+     * @deprecated Don't use this method if *wdio-performancetotal-service* is enabled.
+     * @param performanceResultsFileName The result output file name w/o extension. 
+     * @param dropResultsFromFailedTest If true - performance analysis will not includ failed tests.
+     */
     analyzeResults(performanceResultsFileName?: string, dropResultsFromFailedTest?: boolean) {
         let resultsFileName = this._performanceResultsFileName;
 
