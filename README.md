@@ -1,4 +1,6 @@
 # performance-total
+[chart](resources/chart.png)
+
 With this plugin for [webdriver.io](https://webdriver.io/) you can easily add performance analysis to any flow in your tests.
 
 <h2>Installation</h2>
