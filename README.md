@@ -2,11 +2,15 @@
 With this plugin for [webdriver.io](https://webdriver.io/) you can easily add performance analysis to any flow in your tests.
 
 <h2>Installation</h2>
-Install this module locally with the following command to be used as a (dev-)dependency:
+The easiest way to install this module as a (dev-)dependency is by using the following command:
 
 ```
-npm install performancetotal --save
-npm install performancetotal --save-dev
+npm install wdio-performancetotal-service --save
+```
+Or
+
+```
+npm install wdio-performancetotal-service --save-dev
 ```
 
 <h2>Usage</h2>
@@ -37,6 +41,25 @@ exports.config = {
   // ...
 };
 ```
+
+<h2>Options</h2>
+
+<h3>disableAppendToExistingFile</h3>
+When set to 'true', tests from a spec file will overwrite any existing performance data.
+When set to 'false' (default), performance data will be added to existing data.
+
+<h3>performanceResultsFileName</h3>
+You can change the default results file name ('performance-results').
+The results file normally overites an existing file. You can add a timestamp to the file name to keep results history:
+
+```
+...
+performanceResultsFileName: `performance-results_${new Date().getTime()}`
+...
+```
+
+<h3>dropResultsFromFailedTest</h3>
+Default is `false`. When the value is set to `true`, performance analysis from failed tests would be excluded.
 
 <h2>Usage in test</h2>
 
