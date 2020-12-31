@@ -45,11 +45,13 @@ exports.config = {
 <h2>Options</h2>
 
 <h3>disableAppendToExistingFile</h3>
-When set to 'true', tests from a spec file will overwrite any existing performance data.
-When set to 'false' (default), performance data will be added to existing data.
+
+When set to `true`, tests from a spec file will overwrite any existing performance data.
+When set to `false` (default), performance data will be added to existing data.
 
 <h3>performanceResultsFileName</h3>
-You can change the default results file name ('performance-results').
+
+You can change the default results file name (`performance-results`).
 The results file normally overites an existing file. You can add a timestamp to the file name to keep results history:
 
 ```
@@ -59,6 +61,7 @@ performanceResultsFileName: `performance-results_${new Date().getTime()}`
 ```
 
 <h3>dropResultsFromFailedTest</h3>
+
 Default is `false`. When the value is set to `true`, performance analysis from failed tests would be excluded.
 
 <h2>Usage in test</h2>
