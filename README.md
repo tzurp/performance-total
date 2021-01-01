@@ -53,8 +53,8 @@ When set to `false` (default), performance data will be added to the existing da
 
 <h3>performanceResultsFileName</h3>
 
-You can change the default results file name (`performance-results`).
-The results file normally overites an existing file. You can add a timestamp to the file name to keep the results history. For example:
+You can set the default results file name (`performance-results`).
+A newly created results file normally overwrites the old file. If you want to keep old files, it is recommended to add a timestamp to the file name. For example:
 
 ```
 ...
