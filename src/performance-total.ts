@@ -6,7 +6,7 @@ import { IdGenerator } from "./helpers/id-generator";
 
 class PerformanceTotal {
     private _instanceid: string;
-    private _resultsDir: string;
+    private _resultsDir = "";
     private logFileName = "performance-log.txt";
     private _performanceResultsFileName = "performance-results";
     private performanceLogger: PerformanceLogger;
@@ -15,8 +15,6 @@ class PerformanceTotal {
         this._instanceid = new IdGenerator().getId("inst");
 
         this.performanceLogger = new PerformanceLogger();
-
-        this._resultsDir = this.getResultsDir();
     }
 
     get outDir(): string {
@@ -36,6 +34,8 @@ class PerformanceTotal {
      * @param disableAppendToExistingFile If true, existing performance data will be overwritten for each test suite.
      */
     async initialize(disableAppendToExistingFile: boolean): Promise<void> {
+        this._resultsDir = await this.createResultsDirIfNotExist();
+        
         const initObj = JSON.stringify({ "startDisplayTime": new Date().toLocaleString() });
 
         const fileName = path.join(this._resultsDir, this.logFileName);
@@ -64,7 +64,7 @@ class PerformanceTotal {
     analyzeResults(performanceResultsFileName?: string, dropResultsFromFailedTest?: boolean) {
         let resultsFileName = this._performanceResultsFileName;
 
-        if(performanceResultsFileName) {
+        if (performanceResultsFileName) {
             resultsFileName = performanceResultsFileName;
         }
 
@@ -75,18 +75,20 @@ class PerformanceTotal {
         return path.join(this._resultsDir, fileName)
     }
 
-    private getResultsDir(): string {
+    private async createResultsDirIfNotExist(): Promise<string> {
         const resultsDir = "performance-results";
         const root = require.main?.paths[0].split('node_modules')[0].slice(0, -1);
 
         console.log(`Root path = ${root}`);
 
-        if (!root) { throw new Error("Can't get root folder") }
+        if (!root) { console.log("Can't get root folder"); return "" }
 
         const dirPath = path.join(root, resultsDir);
 
-        if (!fs.existsSync(dirPath)) {
-            fs.mkdirSync(dirPath);
+        const isFileExists = await fileWriter.isFileExist(dirPath);
+
+        if (!isFileExists) {
+            await fileWriter.makeDir(dirPath);
         }
 
         return dirPath;

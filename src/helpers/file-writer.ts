@@ -1,7 +1,6 @@
 import { promises as fs } from "fs";
 
 class FileWriter {
-
     /**
      * Overwrites data to file
      * @param filePath 
@@ -38,6 +37,28 @@ class FileWriter {
         const stringArray = data.split("\n");
 
         return stringArray;
+    }
+
+    async makeDir(dirPath: string): Promise<void> {
+        try {
+            await fs.mkdir(dirPath);
+        }
+        catch (err) {
+            console.log(`performance-total error: can't create dir: ${err}`);
+        }
+    }
+
+    async isFileExist(dirPath: string): Promise<boolean> {
+        let isExists = false;
+        try {
+            await fs.access(dirPath);
+            isExists = true;
+        }
+        catch {
+            isExists = false;
+        }
+
+        return isExists;
     }
 }
 export default new FileWriter();
