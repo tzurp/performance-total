@@ -35,7 +35,7 @@ class PerformanceTotal {
      */
     async initialize(disableAppendToExistingFile: boolean): Promise<void> {
         this._resultsDir = await this.createResultsDirIfNotExist();
-        
+
         const initObj = JSON.stringify({ "startDisplayTime": new Date().toLocaleString() });
 
         const fileName = path.join(this._resultsDir, this.logFileName);
@@ -61,14 +61,14 @@ class PerformanceTotal {
      * @param performanceResultsFileName The result output file name w/o extension. 
      * @param dropResultsFromFailedTest If true - performance analysis will not includ failed tests.
      */
-    analyzeResults(performanceResultsFileName?: string, dropResultsFromFailedTest?: boolean) {
+    async analyzeResults(performanceResultsFileName?: string, dropResultsFromFailedTest?: boolean) {
         let resultsFileName = this._performanceResultsFileName;
 
         if (performanceResultsFileName) {
             resultsFileName = performanceResultsFileName;
         }
 
-        this.performanceLogger.analyzeResults(this.getFilePath(this.logFileName), this.getFilePath(resultsFileName), dropResultsFromFailedTest);
+        await this.performanceLogger.analyzeResults(this.getFilePath(this.logFileName), this.getFilePath(resultsFileName), dropResultsFromFailedTest);
     }
 
     private getFilePath(fileName: string): string {
