@@ -11,8 +11,8 @@ afterEach(() => {
     browser.reloadSession();
 });
 
-after(() => {
-    performancetotal.analyzeResults();
+after(async () => {
+    await performancetotal.analyzeResults();
 });
 
 describe('suite-1', () => {

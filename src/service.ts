@@ -30,7 +30,7 @@ export default class PerformanceTotalService {
         performanceTotal.finalize(passed);
     }
 
-    after(exitCode: any, config: any, capabilities: any) {
-        performanceTotal.analyzeResults(this._serviceOptions.performanceResultsFileName, this._serviceOptions.dropResultsFromFailedTest);
+    async after(exitCode: any, config: any, capabilities: any) {
+        await performanceTotal.analyzeResults(this._serviceOptions.performanceResultsFileName, this._serviceOptions.dropResultsFromFailedTest);
     }
 }
