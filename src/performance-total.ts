@@ -36,7 +36,7 @@ class PerformanceTotal {
     async initialize(disableAppendToExistingFile: boolean): Promise<void> {
         this._resultsDir = await this.createResultsDirIfNotExist();
 
-        const initObj = JSON.stringify({ "startDisplayTime": new Date().toLocaleString() });
+        const initObj = JSON.stringify({ "startDisplayTime": new Date().toLocaleString(), "instanceID": this._instanceid });
 
         const fileName = path.join(this._resultsDir, this.logFileName);
 
