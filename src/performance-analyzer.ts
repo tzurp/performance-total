@@ -43,7 +43,9 @@ export class PerformanceAnalyzer {
         });
 
         const picked = this._performanceResults.map(({ name, averageTime, sem, repeats, minValue, maxValue }) => ({ name, averageTime, sem, repeats, minValue, maxValue }))
-        console.log("\nperformancetotal results:\n")
+        
+        console.log("\nPerformance-Total results:\n")
+        
         console.table(picked);
 
         this.serializeData(saveDataFilePath);

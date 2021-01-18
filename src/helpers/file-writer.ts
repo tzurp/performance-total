@@ -11,7 +11,7 @@ class FileWriter {
             await fs.writeFile(filePath, content);
         }
         catch (err) {
-            console.log(`performancetotal error: writeFile failed: ${err}`);
+            console.log(`Performance-Total error: writeFile failed: ${err}`);
         }
     }
 
@@ -20,7 +20,7 @@ class FileWriter {
             await fs.appendFile(filePath, lineContent);
         }
         catch (err) {
-            console.log(`performancetotal error: appendFile failed: ${err}`);
+            console.log(`Performance-Total error: appendFile failed: ${err}`);
         }
     }
 
@@ -31,7 +31,7 @@ class FileWriter {
             data = await fs.readFile(filePath, "utf-8");
         }
         catch (err) {
-            console.log(`performancetotal error: readFile failed: ${err}`);
+            console.log(`Performance-Total error: readFile failed: ${err}`);
         }
 
         const stringArray = data.split("\n");
@@ -44,7 +44,7 @@ class FileWriter {
             await fs.mkdir(dirPath);
         }
         catch (err) {
-            console.log(`performance-total error: can't create dir: ${err}`);
+            console.log(`Performance-Total error: can't create dir: ${dirPath}: ${err}`);
         }
     }
 

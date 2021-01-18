@@ -79,9 +79,7 @@ class PerformanceTotal {
         const resultsDir = "performance-results";
         const root = require.main?.paths[0].split('node_modules')[0].slice(0, -1);
 
-        console.log(`Root path = ${root}`);
-
-        if (!root) { console.log("Can't get root folder"); return "" }
+        if (!root) { console.log("Performance-Total error: Can't get root folder"); return "" }
 
         const dirPath = path.join(root, resultsDir);
 
