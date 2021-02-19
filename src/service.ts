@@ -1,7 +1,7 @@
 import performanceTotal from "./performance-total";
 
 export default class PerformanceTotalService {
-    browser: WebdriverIO.BrowserObject;
+    browser: WebdriverIO.Browser;
     _serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean };
     /**
      * `serviceOptions` contains all options specific to the service
@@ -13,7 +13,7 @@ export default class PerformanceTotalService {
      *
      * the `serviceOptions` parameter will be: `{ foo: 'bar' }`
      */
-    constructor(serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean }, capabilities: any, config: any, browser: WebdriverIO.BrowserObject) {
+    constructor(serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean }, capabilities: any, config: any, browser: WebdriverIO.Browser) {
         this.browser = browser
         this._serviceOptions = serviceOptions;
     }
