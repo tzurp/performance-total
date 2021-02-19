@@ -6,7 +6,7 @@
   "types": "build/app.d.ts",
   "files": [
     "/build/src",
-    "app.d.ts"
+    "/build/app.d.ts"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
