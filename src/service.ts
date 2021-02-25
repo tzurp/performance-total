@@ -2,7 +2,7 @@ import performanceTotal from "./performance-total";
 
 export default class PerformanceTotalService {
     browser: WebdriverIO.Browser;
-    _serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean };
+    _serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, performanceResultsDirectory: string };
     /**
      * `serviceOptions` contains all options specific to the service
      * e.g. if defined as follows:
@@ -13,7 +13,7 @@ export default class PerformanceTotalService {
      *
      * the `serviceOptions` parameter will be: `{ foo: 'bar' }`
      */
-    constructor(serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean }, capabilities: any, config: any, browser: WebdriverIO.Browser) {
+    constructor(serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, performanceResultsDirectory: string }, capabilities: any, config: any, browser: WebdriverIO.Browser) {
         this.browser = browser
         this._serviceOptions = serviceOptions;
     }
@@ -23,7 +23,7 @@ export default class PerformanceTotalService {
     }
 
     async beforeTest(test: any, context: any) {
-        await performanceTotal.initialize(this._serviceOptions.disableAppendToExistingFile);
+        await performanceTotal.initialize(this._serviceOptions.disableAppendToExistingFile, this._serviceOptions.performanceResultsDirectory);
     }
 
     afterTest(test: any, context: any, { error, result, duration, passed, retries }: any) {

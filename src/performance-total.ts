@@ -33,8 +33,8 @@ class PerformanceTotal {
      * @deprecated Don't use this method if *wdio-performancetotal-service* is enabled.
      * @param disableAppendToExistingFile If true, existing performance data will be overwritten for each test suite.
      */
-    async initialize(disableAppendToExistingFile: boolean): Promise<void> {
-        this._resultsDir = await this.createResultsDirIfNotExist();
+    async initialize(disableAppendToExistingFile: boolean, performanceResultsDirectory?: string): Promise<void> {
+        this._resultsDir = await this.createResultsDirIfNotExist(performanceResultsDirectory);
 
         const initObj = JSON.stringify({ "startDisplayTime": new Date().toLocaleString(), "instanceID": this._instanceid });
 
@@ -75,8 +75,18 @@ class PerformanceTotal {
         return path.join(this._resultsDir, fileName)
     }
 
-    private async createResultsDirIfNotExist(): Promise<string> {
-        const resultsDir = "performance-results";
+    private async createResultsDirIfNotExist(resultsPath?: string): Promise<string> {
+        let npath = "";
+        let isNotLegal = true;
+        
+        if (resultsPath) {
+        isNotLegal = /[*."\[\]:;|,]/g.test(resultsPath);
+        
+        npath = path.normalize(resultsPath);
+        }
+        
+        const resultsDir = npath == undefined || npath == "" || isNotLegal ? "performance-results": npath;
+
         const root = require.main?.paths[0].split('node_modules')[0].slice(0, -1);
 
         if (!root) { console.log("Performance-Total error: Can't get root folder"); return "" }
