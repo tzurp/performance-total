@@ -37,7 +37,8 @@ exports.config = {
         {
             disableAppendToExistingFile: false,
             performanceResultsFileName: "performance-results",
-            dropResultsFromFailedTest: false
+            dropResultsFromFailedTest: false,
+            performanceResultsDirectory: "performance-results"
         }]
       ]
   // ...
@@ -66,6 +67,17 @@ performanceResultsFileName: `performance-results_${new Date().getTime()}`
 
 Default is `false`. When the value is set to `true`, performance analysis from failed tests would be excluded.
 
+<h3>performanceResultsDirectory</h3>
+You can override the default path for the results directory in the project's root dir.
+For example:
+
+```
+...
+performanceResultsFileName: "results-dir/performance-total-results"
+...
+```
+
+
 <h2>Usage in test</h2>
 
 Just import <b>performancetotal</b> where you need it, whether it be your test file or any other class:
@@ -87,7 +99,7 @@ it("should test github startup performance", () => {
 
 <h2>Getting the results</h2>
 
-A new directory named `performance-results` is created in your project's root folder and when all the tests are completed two files are created inside it: `performance-results.json` and `performance-results.csv`. The analyzed data includes: average time, standard error of mean(sem), number of samples, min value, max value, earliest time and latest time.
+A new results directory (the default directory name is `performance-results`) is created in your project's root folder and when all the tests are completed two files are created inside it: `performance-results.json` and `performance-results.csv`. The analyzed data includes: average time, standard error of mean(sem), number of samples, min value, max value, earliest time and latest time.
 
 <h2>Typescript support</h2>
 
