@@ -41,7 +41,7 @@ class FileWriter {
 
     async makeDir(dirPath: string): Promise<void> {
         try {
-            await fs.mkdir(dirPath);
+            await fs.mkdir(dirPath, {recursive: true});
         }
         catch (err) {
             console.log(`Performance-Total error: can't create dir: ${dirPath}: ${err}`);
