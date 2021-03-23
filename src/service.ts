@@ -26,7 +26,15 @@ export default class PerformanceTotalService {
         await performanceTotal.initialize(this._serviceOptions.disableAppendToExistingFile, this._serviceOptions.performanceResultsDirectory);
     }
 
+    async beforeScenario(test: any, context: any) {
+        await performanceTotal.initialize(this._serviceOptions.disableAppendToExistingFile, this._serviceOptions.performanceResultsDirectory);
+    }
+
     afterTest(test: any, context: any, { error, result, duration, passed, retries }: any) {
+        performanceTotal.finalize(passed);
+    }
+
+    afterScenario(test: any, context: any, { error, result, duration, passed, retries }: any) {
         performanceTotal.finalize(passed);
     }
 
