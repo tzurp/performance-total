@@ -51,7 +51,7 @@ export default class PerformanceTotalService {
             status = true;
         }
 
-        performanceTotal.finalize(result.passed);
+        performanceTotal.finalize(status);
     }
 
     async after(exitCode: any, config: any, capabilities: any) {
