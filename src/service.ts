@@ -47,7 +47,7 @@ export default class PerformanceTotalService {
     afterScenario({ result }: any) {
         let status = false;
 
-        if (result.passed === Status.PASSED) {
+        if (result.status === Status.PASSED) {
             status = true;
         }
 
