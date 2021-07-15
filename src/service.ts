@@ -40,18 +40,13 @@ export default class PerformanceTotalService {
         await performanceTotal.initialize(this._serviceOptions.disableAppendToExistingFile, this._serviceOptions.performanceResultsDirectory);
     }
 
-    afterTest(test: any, context: any, { error, result, duration, passed, retries }: any) {
+    //@ts-ignore
+    afterTest(test: any, context: any, { error, result, duration, passed, retries }) {
         performanceTotal.finalize(passed);
     }
 
-    afterScenario({ result }: any) {
-        let status = false;
-
-        if (result.status === Status.PASSED) {
-            status = true;
-        }
-
-        performanceTotal.finalize(status);
+    afterScenario(test: any, context: any) {
+        performanceTotal.finalize(test.result.status == Status.PASSED);
     }
 
     async after(exitCode: any, config: any, capabilities: any) {
