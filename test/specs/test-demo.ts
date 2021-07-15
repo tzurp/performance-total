@@ -5,10 +5,10 @@ beforeEach(async () => {
     await performancetotal.initialize(false);
 });
 
-afterEach(() => {
+afterEach(async () => {
     console.log("Test finished");
     performancetotal.finalize(true);
-    browser.reloadSession();
+    await browser.reloadSession();
 });
 
 after(async () => {
@@ -18,20 +18,20 @@ after(async () => {
 describe('suite-1', () => {
     for (let i = 0; i < 3; i++) {
 
-        it(`Test GH vs. SF: Run ${i + 1}`, () => {
+        it(`Test GH vs. SF: Run ${i + 1}`, async () => {
             console.log("Test started");
 
-            browser.url("//t.me");
+            await browser.url("//t.me");
             
             performancetotal.sampleStart("GH-Startup");
             
-            browser.url("https://github.com/");
+            await browser.url("https://github.com/");
             
             performancetotal.sampleEnd("GH-Startup");
 
             performancetotal.sampleStart("SF-Startup");
             
-            browser.url("https://sourceforge.net/");
+            await browser.url("https://sourceforge.net/");
             
             performancetotal.sampleEnd("SF-Startup");
             
