@@ -2,8 +2,10 @@
 ![chart](resources/chart.png)
 
 Note:
-For WebdriverIO v7 use version 2.x.x
+For WebdriverIO v7 use version 2.x.x<br/>
 For WebdriverIO v6 use version 1.x.x
+
+---
 
 With this plugin for [webdriver.io](https://webdriver.io/) you can easily add performance analysis to any flow in your tests.
 
