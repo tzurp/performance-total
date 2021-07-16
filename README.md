@@ -1,7 +1,7 @@
 # performance-total
 Note:<br/>
-For WebdriverIO v7 use version 2.x.x<br/>
-For WebdriverIO v6 use version 1.x.x
+For WebdriverIO v7 use version 2.x.x.<br/>
+For WebdriverIO v6 use version 1.x.x.
 
 ---
 
