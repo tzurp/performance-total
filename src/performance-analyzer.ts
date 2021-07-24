@@ -13,16 +13,16 @@ export class PerformanceAnalyzer {
     }
 
     async analyze(logFileName: string, saveDataFilePath: string, dropResultsFromFailedTest: boolean | undefined): Promise<void> {
-        const performanceLogEntries = await this.deserializeData(logFileName);
+        let performanceLogEntries = await this.deserializeData(logFileName);
         let groupedResults: PerformanceLogEntry[][];
 
-        if (!dropResultsFromFailedTest) {
-            groupedResults = helperMethods.groupBy(performanceLogEntries, p => p.name);
+        if (dropResultsFromFailedTest) {
+            const entriesWithTestPass = performanceLogEntries.filter((e) => e.isTestPassed == true);
+
+            performanceLogEntries = entriesWithTestPass;
         }
-        else {
-            const entriesWithTestPass = performanceLogEntries.filter((e) => e.isTestPassed === true);
-            groupedResults = helperMethods.groupBy(entriesWithTestPass, p => p.name);
-        }
+
+        groupedResults = helperMethods.groupBy(performanceLogEntries, p => p.name && p.startTime);
 
         groupedResults.forEach(group => {
             const durationList = group.map(t => t.duration);
@@ -43,9 +43,9 @@ export class PerformanceAnalyzer {
         });
 
         const picked = this._performanceResults.map(({ name, averageTime, sem, repeats, minValue, maxValue }) => ({ name, averageTime, sem, repeats, minValue, maxValue }))
-        
+
         console.log("\nPerformance-Total results:\n")
-        
+
         console.table(picked);
 
         this.serializeData(saveDataFilePath);
