@@ -1,5 +1,6 @@
 export class PerformanceResult {
     name: string;
+    browserName: string | undefined;
     averageTime: number;
     sem: number;
     repeats: number;

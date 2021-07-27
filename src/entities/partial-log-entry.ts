@@ -5,6 +5,7 @@ export class PartialLogEntry {
     time: number;
     displayTime: string;
     instanceId: string;
+    browserName: string;
 
     constructor() {
         this.name = "";
@@ -13,6 +14,7 @@ export class PartialLogEntry {
         this.time = 0;
         this.displayTime = "";
         this.instanceId = "";
+        this.browserName = "";
     }
 }
 
