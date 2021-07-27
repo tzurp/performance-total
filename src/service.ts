@@ -11,7 +11,7 @@ enum Status {
 }
 
 export default class PerformanceTotalService {
-    _browser: WebdriverIO.Browser;
+    _browser!: WebdriverIO.Browser;
     _serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, analyzeByBrowser: boolean, performanceResultsDirectory: string };
     /**
      * `serviceOptions` contains all options specific to the service
@@ -23,13 +23,12 @@ export default class PerformanceTotalService {
      *
      * the `serviceOptions` parameter will be: `{ foo: 'bar' }`
      */
-    constructor(serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, analyzeByBrowser: boolean, performanceResultsDirectory: string }, capabilities: any, config: any, browser: WebdriverIO.Browser) {
-        this._browser = browser
+    constructor(serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, analyzeByBrowser: boolean, performanceResultsDirectory: string }, capabilities: any, config: any) {
         this._serviceOptions = serviceOptions;
     }
 
-    before(config: any, capabilities: any) {
-        // before all tests run
+    before(config: any, capabilities: any, browser: WebdriverIO.Browser) {
+        this._browser = browser;
     }
 
     async beforeTest(test: any, context: any) {

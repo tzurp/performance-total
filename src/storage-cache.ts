@@ -14,7 +14,7 @@ export class StorageCache {
         this._performanceEntries = new Array<PerformanceLogEntry>();
     }
 
-    createPerformanceEntries(isTestPassed: boolean, browser: WebdriverIO.Browser) {
+    createPerformanceEntries(isTestPassed: boolean, browser: WebdriverIO.Browser): void {
         const revStartEntries = this._startLogEntries.reverse();
 
         revStartEntries.forEach(startEntry => {
