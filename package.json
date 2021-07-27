@@ -1,6 +1,6 @@
 {
   "name": "wdio-performancetotal-service",
-  "version": "2.0.3-0",
+  "version": "2.0.3-1",
   "description": "WebdriverIO service for analyzing test flow performance",
   "main": "build/app.js",
   "types": "build/app.d.ts",
