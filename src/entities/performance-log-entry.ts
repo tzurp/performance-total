@@ -8,10 +8,11 @@ export class PerformanceLogEntry {
 
     duration: number;
     isTestPassed: boolean;
-    browserName: string | undefined;
+    browserName: string;
 
     constructor() {
         this.name = "";
+        this.browserName = "";
         this.id = "";
         this.instanceId = "";
         this.startTime = 0;
