@@ -12,7 +12,7 @@ afterEach(async () => {
 });
 
 after(async () => {
-    await performancetotal.analyzeResults({});
+    await performancetotal.analyzeResults({analyzeByBrowser: true});
 });
 
 describe('suite-1', () => {

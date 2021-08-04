@@ -22,7 +22,7 @@ export class PerformanceAnalyzer {
             performanceLogEntries = entriesWithTestPass;
         }
 
-        groupedResults = !analyzeByBrowser ? helperMethods.groupBy(performanceLogEntries, p => [p.name]) : helperMethods.groupBy(performanceLogEntries, p => [p.name, p.browserName]);
+        groupedResults = !analyzeByBrowser ? helperMethods.groupBy(performanceLogEntries, p => [p.name]) : helperMethods.groupBy(performanceLogEntries, p => [p.name, p.brName]);
         
         groupedResults.forEach(group => {
             const durationList = group.map(t => t.duration);
@@ -31,10 +31,10 @@ export class PerformanceAnalyzer {
             const avgAndSte = calculator.getAverageAndStandardDeviation(durationList);
 
             performanceResult.name = group[0].name;
-            performanceResult.browserName = analyzeByBrowser ? group[0].browserName : "general";
+            performanceResult.brName = analyzeByBrowser ? group[0].brName : "general";
             performanceResult.earliestTime = group[0].startDisplayTime;
             performanceResult.latestTime = group[group.length - 1].startDisplayTime;
-            performanceResult.averageTime = avgAndSte[0];
+            performanceResult.avgTime = avgAndSte[0];
             performanceResult.sem = avgAndSte[1];
             performanceResult.repeats = durationList.length;
             performanceResult.minValue = Math.min(...durationList);
@@ -43,7 +43,7 @@ export class PerformanceAnalyzer {
             this._performanceResults.push(performanceResult);
         });
 
-        const picked = this._performanceResults.map(({ name, browserName, averageTime, sem, repeats, minValue, maxValue }) => ({ name, browserName, averageTime, sem, repeats, minValue, maxValue }))
+        const picked = this._performanceResults.map(({ name, brName, avgTime, sem, repeats, minValue, maxValue }) => ({ name, brName, avgTime, sem, repeats, minValue, maxValue }))
 
         console.log("\nPerformance-Total results:\n")
 
