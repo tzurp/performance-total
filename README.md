@@ -85,7 +85,7 @@ performanceResultsFileName: "results-dir/performance-total-results"
 ```
 
 <h3>analyzeByBrowser</h3>
-Default is `false`. When true, the performance data would be grouped also by the browser type.
+Default is `false`. If true, the performance data would be grouped also by the browser type.
 
 
 <h2>Usage in test</h2>
