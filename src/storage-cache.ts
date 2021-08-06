@@ -1,6 +1,7 @@
 import { PartialLogEntry } from "./entities/partial-log-entry";
 import { PerformanceLogEntry } from "./entities/performance-log-entry";
 import fileWriter from "./helpers/file-writer";
+import { Capabilities } from '@wdio/types'
 
 export class StorageCache {
     _startLogEntries: Array<PartialLogEntry>;
@@ -13,7 +14,7 @@ export class StorageCache {
         this._performanceEntries = new Array<PerformanceLogEntry>();
     }
 
-    createPerformanceEntries(isTestPassed: boolean) {
+    createPerformanceEntries(isTestPassed: boolean, browser: WebdriverIO.Browser): void {
         const revStartEntries = this._startLogEntries.reverse();
 
         revStartEntries.forEach(startEntry => {
@@ -25,6 +26,7 @@ export class StorageCache {
                 tempPerformanceEntry.id = startEntry.id;
                 tempPerformanceEntry.instanceId = startEntry.instanceId;
                 tempPerformanceEntry.name = correspondedEndEntry.name;
+                tempPerformanceEntry.brName = (browser.capabilities as Capabilities.DesiredCapabilities).browserName ?? "";
                 tempPerformanceEntry.startDisplayTime = startEntry.displayTime;
                 tempPerformanceEntry.startTime = startEntry.time;
                 tempPerformanceEntry.endTime = correspondedEndEntry.time;

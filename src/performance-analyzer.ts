@@ -12,18 +12,18 @@ export class PerformanceAnalyzer {
         this._performanceResults = new Array<PerformanceResult>();
     }
 
-    async analyze(logFileName: string, saveDataFilePath: string, dropResultsFromFailedTest: boolean | undefined): Promise<void> {
-        const performanceLogEntries = await this.deserializeData(logFileName);
+    async analyze(logFileName: string, saveDataFilePath: string, dropResultsFromFailedTest: boolean | undefined, analyzeByBrowser: boolean | undefined): Promise<void> {
+        let performanceLogEntries = await this.deserializeData(logFileName);
         let groupedResults: PerformanceLogEntry[][];
 
-        if (!dropResultsFromFailedTest) {
-            groupedResults = helperMethods.groupBy(performanceLogEntries, p => p.name);
-        }
-        else {
-            const entriesWithTestPass = performanceLogEntries.filter((e) => e.isTestPassed === true);
-            groupedResults = helperMethods.groupBy(entriesWithTestPass, p => p.name);
+        if (dropResultsFromFailedTest) {
+            const entriesWithTestPass = performanceLogEntries.filter((e) => e.isTestPassed == true);
+
+            performanceLogEntries = entriesWithTestPass;
         }
 
+        groupedResults = !analyzeByBrowser ? helperMethods.groupBy(performanceLogEntries, p => [p.name]) : helperMethods.groupBy(performanceLogEntries, p => [p.name, p.brName]);
+        
         groupedResults.forEach(group => {
             const durationList = group.map(t => t.duration);
             const performanceResult = new PerformanceResult();
@@ -31,9 +31,10 @@ export class PerformanceAnalyzer {
             const avgAndSte = calculator.getAverageAndStandardDeviation(durationList);
 
             performanceResult.name = group[0].name;
+            performanceResult.brName = analyzeByBrowser ? group[0].brName : "general";
             performanceResult.earliestTime = group[0].startDisplayTime;
             performanceResult.latestTime = group[group.length - 1].startDisplayTime;
-            performanceResult.averageTime = avgAndSte[0];
+            performanceResult.avgTime = avgAndSte[0];
             performanceResult.sem = avgAndSte[1];
             performanceResult.repeats = durationList.length;
             performanceResult.minValue = Math.min(...durationList);
@@ -42,13 +43,13 @@ export class PerformanceAnalyzer {
             this._performanceResults.push(performanceResult);
         });
 
-        const picked = this._performanceResults.map(({ name, averageTime, sem, repeats, minValue, maxValue }) => ({ name, averageTime, sem, repeats, minValue, maxValue }))
-        
+        const picked = this._performanceResults.map(({ name, brName, avgTime, sem, repeats, minValue, maxValue }) => ({ name, brName, avgTime, sem, repeats, minValue, maxValue }))
+
         console.log("\nPerformance-Total results:\n")
-        
+
         console.table(picked);
 
-        this.serializeData(saveDataFilePath);
+        await this.serializeData(saveDataFilePath);
     }
 
     private async serializeData(saveDataFilePath: string) {

@@ -11,8 +11,8 @@ enum Status {
 }
 
 export default class PerformanceTotalService {
-    browser: WebdriverIO.Browser;
-    _serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, performanceResultsDirectory: string };
+    _browser!: WebdriverIO.Browser;
+    _serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, analyzeByBrowser: boolean, performanceResultsDirectory: string };
     /**
      * `serviceOptions` contains all options specific to the service
      * e.g. if defined as follows:
@@ -23,13 +23,12 @@ export default class PerformanceTotalService {
      *
      * the `serviceOptions` parameter will be: `{ foo: 'bar' }`
      */
-    constructor(serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, performanceResultsDirectory: string }, capabilities: any, config: any, browser: WebdriverIO.Browser) {
-        this.browser = browser
+    constructor(serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, analyzeByBrowser: boolean, performanceResultsDirectory: string }, capabilities: any, config: any) {
         this._serviceOptions = serviceOptions;
     }
 
-    before(config: any, capabilities: any) {
-        // before all tests run
+    before(config: any, capabilities: any, browser: WebdriverIO.Browser) {
+        this._browser = browser;
     }
 
     async beforeTest(test: any, context: any) {
@@ -42,14 +41,14 @@ export default class PerformanceTotalService {
 
     //@ts-ignore
     afterTest(test: any, context: any, { error, result, duration, passed, retries }) {
-        performanceTotal.finalize(passed);
+        performanceTotal.finalize(this._browser, passed);
     }
 
     afterScenario(test: any, context: any) {
-        performanceTotal.finalize(test.result.status == Status.PASSED);
+        performanceTotal.finalize(this._browser, test.result.status == Status.PASSED);
     }
 
     async after(exitCode: any, config: any, capabilities: any) {
-        await performanceTotal.analyzeResults(this._serviceOptions.performanceResultsFileName, this._serviceOptions.dropResultsFromFailedTest);
+        await performanceTotal.analyzeResults({performanceResultsFileName: this._serviceOptions.performanceResultsFileName, dropResultsFromFailedTest: this._serviceOptions.dropResultsFromFailedTest, analyzeByBrowser: this._serviceOptions.analyzeByBrowser});
     }
 }

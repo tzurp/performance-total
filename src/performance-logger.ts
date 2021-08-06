@@ -22,18 +22,18 @@ export class PerformanceLogger {
         this._storageCache._endLogEntries.push(logEntry);
     }
 
-    flush(fileName: string, isTestPassed: boolean) {
+    flush(fileName: string, browser: WebdriverIO.Browser, isTestPassed: boolean) {
         console.log("Performance-Total: flushing to file: " + fileName);
 
-        this._storageCache.createPerformanceEntries(isTestPassed);
+        this._storageCache.createPerformanceEntries(isTestPassed, browser);
 
         this._storageCache.writePerformanceDataToFile(fileName);
     }
 
-    async analyzeResults(sourceLogFileName: string, saveResultsFilePath: string, dropResultsFromFailedTest: boolean | undefined): Promise<void> {
+    async analyzeResults(sourceLogFileName: string, saveResultsFilePath: string, dropResultsFromFailedTest: boolean | undefined, analyzeByBrowser: boolean | undefined): Promise<void> {
         const analyzer = new PerformanceAnalyzer();
 
-        await analyzer.analyze(sourceLogFileName, saveResultsFilePath, dropResultsFromFailedTest);
+        await analyzer.analyze(sourceLogFileName, saveResultsFilePath, dropResultsFromFailedTest, analyzeByBrowser);
     }
 
     private setSample(stepType: StepType, stepName: string, instanceId: string): PartialLogEntry {

@@ -44,7 +44,8 @@ exports.config = {
             disableAppendToExistingFile: false,
             performanceResultsFileName: "performance-results",
             dropResultsFromFailedTest: false,
-            performanceResultsDirectory: "performance-results"
+            performanceResultsDirectory: "performance-results",
+            analyzeByBrowser: false
         }]
       ]
   // ...
@@ -82,6 +83,9 @@ For example:
 performanceResultsFileName: "results-dir/performance-total-results"
 ...
 ```
+
+<h3>analyzeByBrowser</h3>
+Default is `false`. If true, the performance data would be grouped also by the browser type.
 
 
 <h2>Usage in test</h2>
