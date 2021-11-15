@@ -23,8 +23,6 @@ export class PerformanceLogger {
     }
 
     flush(fileName: string, browser: WebdriverIO.Browser, isTestPassed: boolean) {
-        console.log("Performance-Total: flushing to file: " + fileName);
-
         this._storageCache.createPerformanceEntries(isTestPassed, browser);
 
         this._storageCache.writePerformanceDataToFile(fileName);
