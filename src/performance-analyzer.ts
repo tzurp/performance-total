@@ -43,21 +43,20 @@ export class PerformanceAnalyzer {
             this._performanceResults.push(performanceResult);
         });
 
-        const picked = this._performanceResults.map(({ name, brName, avgTime, sem, repeats, minValue, maxValue }) => ({ name, brName, avgTime, sem, repeats, minValue, maxValue }))
+        const picked = this._performanceResults.map(({ name, brName, avgTime, sem, repeats, minValue, maxValue }) => ({ name, brName, avgTime, sem, repeats, minValue, maxValue }));
 
-        console.log("\nPerformance-Total results:\n")
+        console.log("\nPerformance-Total results:\n");
 
         console.table(picked);
 
         await this.serializeData(saveDataFilePath);
+
+        console.log(`\nPerformance-Total results saved to: ${saveDataFilePath}.csv/json\n`);
     }
 
     private async serializeData(saveDataFilePath: string) {
-        const jsonDataFilePath = saveDataFilePath + ".json";
+        await fileWriter.writeToFile(saveDataFilePath + ".json", JSON.stringify(this._performanceResults));
 
-        await fileWriter.appendLineToFile(jsonDataFilePath, JSON.stringify(this._performanceResults));
-
-        // write to csv
         const csv = new ObjectsToCsv(this._performanceResults);
 
         const csvString = await csv.toString(true);
