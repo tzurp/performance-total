@@ -21,12 +21,16 @@ class PerformanceTotal {
         return this._resultsDir;
     }
 
-    sampleStart(stepName: string) {
+    sampleStart(stepName: string): void {
         this.performanceLogger.sampleStart(stepName, this._instanceid);
     }
 
-    sampleEnd(stepName: string) {
+    sampleEnd(stepName: string): void {
         this.performanceLogger.sampleEnd(stepName, this._instanceid);
+    }
+
+    getSampleTime(stepName: string): number {
+        return this.performanceLogger.getSampleTime(stepName);
     }
 
     /**

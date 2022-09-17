@@ -36,6 +36,10 @@ describe('suite-1', () => {
             performancetotal.sampleEnd("SF-Startup");
             
             console.log("Test ended");
+
+            console.log("GH-Startup sample timespan: " + performancetotal.getSampleTime("GH-Startup"));
+
+            console.log("SF-Startup sample timespan: " + performancetotal.getSampleTime("SF-Startup"));
         });
     }
 });

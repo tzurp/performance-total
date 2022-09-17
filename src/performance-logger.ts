@@ -22,6 +22,10 @@ export class PerformanceLogger {
         this._storageCache._endLogEntries.push(logEntry);
     }
 
+    getSampleTime(stepName: string): number {
+        return this._storageCache.getPerformanceEntryTime(stepName);
+    }
+
     flush(fileName: string, browser: WebdriverIO.Browser, isTestPassed: boolean) {
         this._storageCache.createPerformanceEntries(isTestPassed, browser);
 
