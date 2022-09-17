@@ -106,6 +106,20 @@ it("should test github startup performance", () => {
         });
 ```
 
+It is possible to get the time span for a single sample inside a test:
+
+```
+it("should test github startup performance", () => {
+            // ...
+            performancetotal.sampleStart("Startup");
+            
+            browser.url("https://github.com/");
+            
+            performancetotal.sampleEnd("Startup");
+
+            expect(performancetotal.getSampleTime("Startup")).to.be.at.most(1000);         
+        });
+```
 
 <h2>Getting the results</h2>
 
