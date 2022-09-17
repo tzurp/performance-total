@@ -1,7 +1,8 @@
 import { PartialLogEntry } from "./entities/partial-log-entry";
 import { PerformanceLogEntry } from "./entities/performance-log-entry";
 import fileWriter from "./helpers/file-writer";
-import { Capabilities } from '@wdio/types'
+import { Capabilities } from '@wdio/types';
+import { StepSuffix } from "./constants/step-suffix";
 
 export class StorageCache {
     _startLogEntries: Array<PartialLogEntry>;
@@ -12,6 +13,22 @@ export class StorageCache {
         this._startLogEntries = new Array<PartialLogEntry>();
         this._endLogEntries = new Array<PartialLogEntry>();
         this._performanceEntries = new Array<PerformanceLogEntry>();
+    }
+
+    getPerformanceEntryTime(stepName: string): number {
+        let duration = 0;
+
+        const startEntry = this._startLogEntries.find(e => e.name == stepName + StepSuffix.used);
+
+        if (startEntry) {
+            const endEntry = this._endLogEntries.find(e => e.id == startEntry.id);
+
+            if (endEntry) {
+                duration = endEntry.time - startEntry.time;
+            }
+        }
+
+        return duration;
     }
 
     createPerformanceEntries(isTestPassed: boolean, browser: WebdriverIO.Browser): void {
@@ -46,7 +63,7 @@ export class StorageCache {
         if (startEntry) {
             id = startEntry.id;
 
-            startEntry.name += "_used";
+            startEntry.name += StepSuffix.used;
         }
 
         return id;
