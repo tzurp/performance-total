@@ -85,7 +85,7 @@ class PerformanceTotal {
         let isNotLegal = true;
         
         if (resultsPath) {
-        isNotLegal = /[*."\[\]:;|,]/g.test(resultsPath);
+        isNotLegal = /[*"\[\]:;|,]/g.test(resultsPath);
         
         npath = path.normalize(resultsPath);
         }
