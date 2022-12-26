@@ -1,8 +1,8 @@
 import { PerformanceLogger } from "./performance-logger";
 import path from "path";
-import fs from "fs";
 import fileWriter from "./helpers/file-writer";
 import { IdGenerator } from "./helpers/id-generator";
+import appRoot from "app-root-path";
 
 class PerformanceTotal {
     private _instanceid: string;
@@ -92,7 +92,7 @@ class PerformanceTotal {
         
         const resultsDir = npath == undefined || npath == "" || isNotLegal ? "performance-results": npath;
 
-        const root = require.main?.paths[0].split('node_modules')[0].slice(0, -1);
+        const root = appRoot.path;
 
         if (!root) { console.log("Performance-Total error: Can't get root folder"); return "" }
 
