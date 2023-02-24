@@ -8,7 +8,7 @@ For WebdriverIO v6 use version 1.x.x.
 
 ![chart](resources/chart.png)
 
-With this plugin for [webdriver.io](https://webdriver.io/) you can easily add performance analysis to any flow in your tests.
+With this plugin for [webdriver.io](https://webdriver.io/) you can easily add performance analysis to any flow in your tests, whether it's a pure UI, API, or a combination of both. This plugin provides a simple and efficient way to measure the response times of various procedures and identify potential bottlenecks in your application. With this information, you can make informed decisions about optimizations and improvements to enhance the overall performance of your application.
 
 <h2>Installation</h2>
 The easiest way to install this module as a (dev-)dependency is by using the following command:

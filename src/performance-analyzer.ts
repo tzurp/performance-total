@@ -22,6 +22,10 @@ export class PerformanceAnalyzer {
             performanceLogEntries = entriesWithTestPass;
         }
 
+        if(!performanceLogEntries || performanceLogEntries.length == 0) {
+            return;
+        }
+
         groupedResults = !analyzeByBrowser ? helperMethods.groupBy(performanceLogEntries, p => [p.name]) : helperMethods.groupBy(performanceLogEntries, p => [p.name, p.brName]);
         
         groupedResults.forEach(group => {

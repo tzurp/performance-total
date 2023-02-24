@@ -1,13 +1,12 @@
 import {performancetotal} from "../../app";
 
-beforeEach(async () => {
-    console.log("Before hook");
-    await performancetotal.initialize(false);
+before(async()=> {
+    await performancetotal.initialize(true);
 });
 
 afterEach(async () => {
     console.log("Test finished");
-    performancetotal.finalize(browser, true);
+    performancetotal.finalizeTest(browser, true);
     await browser.reloadSession();
 });
 
@@ -35,8 +34,6 @@ describe('suite-1', () => {
             
             performancetotal.sampleEnd("SF-Startup");
             
-            console.log("Test ended");
-
             console.log("GH-Startup sample timespan: " + performancetotal.getSampleTime("GH-Startup"));
 
             console.log("SF-Startup sample timespan: " + performancetotal.getSampleTime("SF-Startup"));

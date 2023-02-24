@@ -27,25 +27,19 @@ export default class PerformanceTotalService {
         this._serviceOptions = serviceOptions;
     }
 
-    before(config: any, capabilities: any, browser: WebdriverIO.Browser) {
+    async before(config: any, capabilities: any, browser: WebdriverIO.Browser) {
         this._browser = browser;
-    }
 
-    async beforeTest(test: any, context: any) {
-        await performanceTotal.initialize(this._serviceOptions.disableAppendToExistingFile, this._serviceOptions.performanceResultsDirectory);
-    }
-
-    async beforeScenario(test: any, context: any) {
         await performanceTotal.initialize(this._serviceOptions.disableAppendToExistingFile, this._serviceOptions.performanceResultsDirectory);
     }
 
     //@ts-ignore
     afterTest(test: any, context: any, { error, result, duration, passed, retries }) {
-        performanceTotal.finalize(this._browser, passed);
+        performanceTotal.finalizeTest(this._browser, passed);
     }
 
     afterScenario(test: any, context: any) {
-        performanceTotal.finalize(this._browser, test.result.status == Status.PASSED);
+        performanceTotal.finalizeTest(this._browser, test.result.status == Status.PASSED);
     }
 
     async after(exitCode: any, config: any, capabilities: any) {
