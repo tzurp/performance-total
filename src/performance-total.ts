@@ -34,7 +34,7 @@ class PerformanceTotal {
     async initialize(disableAppendToExistingFile: boolean, performanceResultsDirectory?: string): Promise<void> {
         const resultsDir = await fileWriter.createResultsDirIfNotExist(performanceResultsDirectory);
 
-        (global as any)._resultsDir = resultsDir;
+        (global as any)._performanceTotalResultsDir = resultsDir;
 
         const initObj = JSON.stringify({ "startDisplayTime": new Date().toLocaleString(), "instanceID": this._instanceid });
 
@@ -53,7 +53,7 @@ class PerformanceTotal {
      * @param isTestPassed 
      */
     finalizeTest(browser: WebdriverIO.Browser, isTestPassed: boolean): void {
-        this.performanceCache.flush(fileWriter.getFilePath((global as any)._resultsDir, this.logFileName), browser, isTestPassed);
+        this.performanceCache.flush(fileWriter.getFilePath((global as any)._performanceTotalResultsDir, this.logFileName), browser, isTestPassed);
     }
 
     /**
@@ -65,7 +65,7 @@ class PerformanceTotal {
     async analyzeResults({ performanceResultsFileName, dropResultsFromFailedTest, analyzeByBrowser }: initializeParams): Promise<void> {
         const analyzer = new PerformanceAnalyzer();
         let resultsFileName = this._performanceResultsFileName;
-        const resultsDir = (global as any)._resultsDir;
+        const resultsDir = (global as any)._performanceTotalResultsDir;
 
         if (performanceResultsFileName) {
             resultsFileName = performanceResultsFileName;

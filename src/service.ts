@@ -1,3 +1,4 @@
+import { Options } from "./entities/options";
 import performanceTotal from "./performance-total";
 
 enum Status {
@@ -12,7 +13,7 @@ enum Status {
 
 export default class PerformanceTotalService {
     _browser!: WebdriverIO.Browser;
-    _serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, analyzeByBrowser: boolean, performanceResultsDirectory: string };
+    _serviceOptions: Options
     /**
      * `serviceOptions` contains all options specific to the service
      * e.g. if defined as follows:
@@ -23,7 +24,7 @@ export default class PerformanceTotalService {
      *
      * the `serviceOptions` parameter will be: `{ foo: 'bar' }`
      */
-    constructor(serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, analyzeByBrowser: boolean, performanceResultsDirectory: string }, capabilities: any, config: any) {
+    constructor(serviceOptions: Options, capabilities: any, config: any) {
         this._serviceOptions = serviceOptions;
     }
 
