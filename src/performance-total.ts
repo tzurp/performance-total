@@ -32,9 +32,16 @@ class PerformanceTotal {
      * @param disableAppendToExistingFile If true, existing performance data will be overwritten for each test suite.
      */
     async initialize(disableAppendToExistingFile: boolean, performanceResultsDirectory?: string): Promise<void> {
-        const resultsDir = await fileWriter.createResultsDirIfNotExist(performanceResultsDirectory);
+        let resultsDir = "";
 
-        (global as any)._performanceTotalResultsDir = resultsDir;
+        if (!(global as any)._performanceTotalResultsDir) {
+            resultsDir = await fileWriter.createResultsDirIfNotExist(performanceResultsDirectory);
+            
+            (global as any)._performanceTotalResultsDir = resultsDir;
+        }
+        else {
+            resultsDir = (global as any)._performanceTotalResultsDir;
+        }
 
         const initObj = JSON.stringify({ "startDisplayTime": new Date().toLocaleString(), "instanceID": this._instanceid });
 
