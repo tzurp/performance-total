@@ -35,12 +35,12 @@ export default class PerformanceTotalService {
     }
 
     //@ts-ignore
-    afterTest(test: any, context: any, { error, result, duration, passed, retries }) {
-        performanceTotal.finalizeTest(this._browser, passed);
+    async afterTest(test: any, context: any, { error, result, duration, passed, retries }) {
+        await performanceTotal.finalizeTest(this._browser, passed);
     }
 
-    afterScenario(test: any, context: any) {
-        performanceTotal.finalizeTest(this._browser, test.result.status == Status.PASSED);
+    async afterScenario(test: any, context: any) {
+        await performanceTotal.finalizeTest(this._browser, test.result.status == Status.PASSED);
     }
 
     async after(exitCode: any, config: any, capabilities: any) {

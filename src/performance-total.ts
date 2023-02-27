@@ -1,5 +1,5 @@
 import path from "path";
-import fileWriter from "./helpers/file-writer";
+import {FileWriter} from "./helpers/file-writer";
 import { IdGenerator } from "./helpers/id-generator";
 import { PerformanceAnalyzer } from "./performance-analyzer";
 import { PerformanceCache } from "./performance-cache";
@@ -33,6 +33,7 @@ class PerformanceTotal {
      */
     async initialize(disableAppendToExistingFile: boolean, performanceResultsDirectory?: string): Promise<void> {
         let resultsDir = "";
+        const fileWriter = FileWriter.getInstance();
 
         if (!(global as any)._performanceTotalResultsDir) {
             resultsDir = await fileWriter.createResultsDirIfNotExist(performanceResultsDirectory);
@@ -59,8 +60,8 @@ class PerformanceTotal {
      * @deprecated Don't use this method if *wdio-performancetotal-service* is enabled.
      * @param isTestPassed 
      */
-    finalizeTest(browser: WebdriverIO.Browser, isTestPassed: boolean): void {
-        this.performanceCache.flush(fileWriter.getFilePath((global as any)._performanceTotalResultsDir, this.logFileName), browser, isTestPassed);
+    public async finalizeTest(browser: WebdriverIO.Browser, isTestPassed: boolean): Promise<void> {
+        await this.performanceCache.flush(FileWriter.getInstance().getFilePath((global as any)._performanceTotalResultsDir, this.logFileName), browser, isTestPassed);
     }
 
     /**
@@ -71,6 +72,7 @@ class PerformanceTotal {
      */
     async analyzeResults({ performanceResultsFileName, dropResultsFromFailedTest, analyzeByBrowser }: initializeParams): Promise<void> {
         const analyzer = new PerformanceAnalyzer();
+        const fileWriter = FileWriter.getInstance();
         let resultsFileName = this._performanceResultsFileName;
         const resultsDir = (global as any)._performanceTotalResultsDir;
 

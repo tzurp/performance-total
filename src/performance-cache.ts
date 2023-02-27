@@ -1,6 +1,6 @@
 import { PartialLogEntry, StepType } from "./entities/partial-log-entry";
 import { PerformanceLogEntry } from "./entities/performance-log-entry";
-import fileWriter from "./helpers/file-writer";
+import { FileWriter } from "./helpers/file-writer";
 import { Capabilities } from '@wdio/types';
 import { StepSuffix } from "./constants/step-suffix";
 import { PerformanceAnalyzer } from "./performance-analyzer";
@@ -33,17 +33,17 @@ export class PerformanceCache {
         return this.getPerformanceEntryTime(stepName);
     }
 
-    public flush(fileName: string, browser: WebdriverIO.Browser, isTestPassed: boolean) {
+    public async flush(fileName: string, browser: WebdriverIO.Browser, isTestPassed: boolean) {
         this.createPerformanceEntries(isTestPassed, browser);
 
-        this.writePerformanceDataToFile(fileName);
+        await this.writePerformanceDataToFile(fileName);
     }
 
     private setSample(stepType: StepType, stepName: string, instanceId: string): PartialLogEntry {
         let id = "";
         const logEntry = new PartialLogEntry();
 
-        if (stepType as number === StepType.Start as number) {
+        if (stepType as number == StepType.Start as number) {
             id = new IdGenerator().getId();
         }
         else {
@@ -127,10 +127,10 @@ export class PerformanceCache {
         this._performanceEntries = [];
     }
 
-    private writePerformanceDataToFile(fileName: string): void {
-        this._performanceEntries.forEach(async performanceEntry => {
-            await fileWriter.appendLineToFile(fileName, `${JSON.stringify(performanceEntry)}\n`);
-        });;
+    private async writePerformanceDataToFile(fileName: string): Promise<void> {
+        for(let performanceEntry of this._performanceEntries) {
+            await FileWriter.getInstance().appendLineToFile(fileName, `${JSON.stringify(performanceEntry)}\n`);
+        };
 
         this.clearData();
     }
