@@ -1,3 +1,4 @@
+import { Options } from "./entities/options";
 import performanceTotal from "./performance-total";
 
 enum Status {
@@ -12,7 +13,7 @@ enum Status {
 
 export default class PerformanceTotalService {
     _browser!: WebdriverIO.Browser;
-    _serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, analyzeByBrowser: boolean, performanceResultsDirectory: string };
+    _serviceOptions: Options
     /**
      * `serviceOptions` contains all options specific to the service
      * e.g. if defined as follows:
@@ -23,29 +24,23 @@ export default class PerformanceTotalService {
      *
      * the `serviceOptions` parameter will be: `{ foo: 'bar' }`
      */
-    constructor(serviceOptions: { disableAppendToExistingFile: boolean, performanceResultsFileName: string, dropResultsFromFailedTest: boolean, analyzeByBrowser: boolean, performanceResultsDirectory: string }, capabilities: any, config: any) {
+    constructor(serviceOptions: Options, capabilities: any, config: any) {
         this._serviceOptions = serviceOptions;
     }
 
-    before(config: any, capabilities: any, browser: WebdriverIO.Browser) {
+    async before(config: any, capabilities: any, browser: WebdriverIO.Browser) {
         this._browser = browser;
-    }
 
-    async beforeTest(test: any, context: any) {
-        await performanceTotal.initialize(this._serviceOptions.disableAppendToExistingFile, this._serviceOptions.performanceResultsDirectory);
-    }
-
-    async beforeScenario(test: any, context: any) {
         await performanceTotal.initialize(this._serviceOptions.disableAppendToExistingFile, this._serviceOptions.performanceResultsDirectory);
     }
 
     //@ts-ignore
-    afterTest(test: any, context: any, { error, result, duration, passed, retries }) {
-        performanceTotal.finalize(this._browser, passed);
+    async afterTest(test: any, context: any, { error, result, duration, passed, retries }) {
+        await performanceTotal.finalizeTest(this._browser, passed);
     }
 
-    afterScenario(test: any, context: any) {
-        performanceTotal.finalize(this._browser, test.result.status == Status.PASSED);
+    async afterScenario(test: any, context: any) {
+        await performanceTotal.finalizeTest(this._browser, test.result.status == Status.PASSED);
     }
 
     async after(exitCode: any, config: any, capabilities: any) {

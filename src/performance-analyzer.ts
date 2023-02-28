@@ -1,7 +1,7 @@
 import { PerformanceLogEntry } from "./entities/performance-log-entry";
 import { PerformanceResult } from "./entities/performance-result";
 import calculator from "./helpers/calculator";
-import fileWriter from "./helpers/file-writer";
+import {FileWriter} from "./helpers/file-writer";
 import helperMethods from "./helpers/group";
 import ObjectsToCsv from 'objects-to-csv';
 
@@ -20,6 +20,10 @@ export class PerformanceAnalyzer {
             const entriesWithTestPass = performanceLogEntries.filter((e) => e.isTestPassed == true);
 
             performanceLogEntries = entriesWithTestPass;
+        }
+
+        if(!performanceLogEntries || performanceLogEntries.length == 0) {
+            return;
         }
 
         groupedResults = !analyzeByBrowser ? helperMethods.groupBy(performanceLogEntries, p => [p.name]) : helperMethods.groupBy(performanceLogEntries, p => [p.name, p.brName]);
@@ -55,6 +59,8 @@ export class PerformanceAnalyzer {
     }
 
     private async serializeData(saveDataFilePath: string) {
+        const fileWriter = FileWriter.getInstance();
+
         await fileWriter.writeToFile(saveDataFilePath + ".json", JSON.stringify(this._performanceResults));
 
         const csv = new ObjectsToCsv(this._performanceResults);
@@ -67,7 +73,7 @@ export class PerformanceAnalyzer {
     private async deserializeData(fileName: string): Promise<Array<PerformanceLogEntry>> {
         const resultsArray = new Array<PerformanceLogEntry>();
 
-        const textResultsArray = await fileWriter.readAllLines(fileName);
+        const textResultsArray = await FileWriter.getInstance().readAllLines(fileName);
 
         textResultsArray.forEach(textResult => {
             if (textResult != "") {

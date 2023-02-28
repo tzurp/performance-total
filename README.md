@@ -8,15 +8,10 @@ For WebdriverIO v6 use version 1.x.x.
 
 ![chart](resources/chart.png)
 
-With this plugin for [webdriver.io](https://webdriver.io/) you can easily add performance analysis to any flow in your tests.
+With this plugin for [webdriver.io](https://webdriver.io/) you can easily add performance analysis to any flow in your tests, whether it's a pure UI, API, or a combination of both. This plugin provides a simple and efficient way to measure the response times of various procedures and identify potential bottlenecks in your application. With this information, you can make informed decisions about optimizations and improvements to enhance the overall performance of your application.
 
 <h2>Installation</h2>
-The easiest way to install this module as a (dev-)dependency is by using the following command:
-
-```
-npm install wdio-performancetotal-service --save
-```
-Or:
+The easiest way to install this module as a dev dependency is by using the following command:
 
 ```
 npm install wdio-performancetotal-service --save-dev
@@ -57,7 +52,7 @@ exports.config = {
 
 <h3>disableAppendToExistingFile</h3>
 
-When set to `true`, new test runs or tests from another spec file will overwrite any existing performance data.
+When set to `true`, new test runs will start fresh and overwrite any existing performance data.
 When set to `false` (default), performance data will be added to the existing data.
 
 <h3>performanceResultsFileName</h3>
@@ -91,40 +86,49 @@ Default is `false`. If true, the performance data would be grouped also by the b
 
 <h2>Usage in test</h2>
 
-Just import <b>performancetotal</b> where you need it, whether it be your test file or any other class:
+Just import <b>performancetotal</b> where you need it, whether it be in your test file or any other class. This object provides methods for measuring performance data in your tests, including sampleStart and sampleEnd for starting and ending performance measurements.
+Here's an example of how you might use the performancetotal object to measure the startup performance of two websites:
 
 ```
+// This test case measures the startup performance of Github and SourceForge using the performancetotal object.
+
 import { performancetotal } from "wdio-performancetotal-service";
 
-it("should test github startup performance", () => {
-            // ...
-            performancetotal.sampleStart("Startup");
-            
-            browser.url("https://github.com/");
-            
-            performancetotal.sampleEnd("Startup");
-            //...
-        });
+it("should test github and sourceforge startup performance", () => {
+    // Start a new performance measurement for Github
+    performancetotal.sampleStart("GH-Startup");
+
+    // Navigate to Github
+    browser.url("https://github.com/");
+
+    // End the Github measurement and save the results
+    performancetotal.sampleEnd("GH-Startup");
+
+    // ...
+
+    // Start a new performance measurement for SourceForge
+    performancetotal.sampleStart("SF-Startup");
+
+    // Navigate to SourceForge
+    await browser.url("https://sourceforge.net/");
+
+    // End the SourceForge measurement and save the results
+    performancetotal.sampleEnd("SF-Startup");
+});
+
 ```
 
-It is possible to get the time span for a single sample inside a test:
+You can retrieve the time taken for a single performance sample by calling performancetotal.getSampleTime(sampleName) in your test. This allows you to check the performance of a specific section of code and ensure that it meets your expectations.
 
 ```
-it("should test github startup performance", () => {
-            // ...
-            performancetotal.sampleStart("Startup");
-            
-            browser.url("https://github.com/");
-            
-            performancetotal.sampleEnd("Startup");
+// Get the time taken for a single sample
+const sampleTime = performancetotal.getSampleTime(sampleName);
 
-            expect(performancetotal.getSampleTime("Startup")).to.be.at.most(1000);         
-        });
 ```
 
 <h2>Getting the results</h2>
 
-A new results directory (the default directory name is `performance-results`) is created in your project's root folder and when all the tests are completed two files are created inside it: `performance-results.json` and `performance-results.csv`. The analyzed data includes: average time, standard error of mean(sem), number of samples, min value, max value, earliest time and latest time.
+When all the tests are completed, a new results directory is created in your project's root folder (the default directory name is performance-results). Inside this directory, two files are created: performance-results.json and performance-results.csv. These files contain analyzed data for each sample, including the average time, standard error of mean (SEM), number of samples, minimum value, maximum value, earliest time, and latest time. You can use this data to identify any performance regressions or improvements over time.
 
 <h2>Typescript support</h2>
 
