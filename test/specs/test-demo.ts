@@ -1,27 +1,13 @@
 import {performancetotal} from "../../app";
+import "./test-base";
 
-beforeEach(async () => {
-    console.log("Before hook");
-    await performancetotal.initialize(false);
-});
-
-afterEach(async () => {
-    console.log("Test finished");
-    performancetotal.finalize(browser, true);
-    await browser.reloadSession();
-});
-
-after(async () => {
-    await performancetotal.analyzeResults({analyzeByBrowser: true});
-});
 
 describe('suite-1', () => {
     for (let i = 0; i < 3; i++) {
-
         it(`Test GH vs. SF: Run ${i + 1}`, async () => {
             console.log("Test started");
 
-            await browser.url("//t.me");
+            await browser.url("https://web.telegram.org/");
             
             performancetotal.sampleStart("GH-Startup");
             
@@ -35,8 +21,6 @@ describe('suite-1', () => {
             
             performancetotal.sampleEnd("SF-Startup");
             
-            console.log("Test ended");
-
             console.log("GH-Startup sample timespan: " + performancetotal.getSampleTime("GH-Startup"));
 
             console.log("SF-Startup sample timespan: " + performancetotal.getSampleTime("SF-Startup"));

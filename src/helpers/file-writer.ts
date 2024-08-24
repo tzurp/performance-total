@@ -1,64 +1,134 @@
-import { promises as fs } from "fs";
+import { promises as fs } from 'fs';
+import path from "path";
+import appRoot from "app-root-path";
 
-class FileWriter {
-    /**
-     * Overwrites data to file
-     * @param filePath 
-     * @param content 
-     */
-    async writeToFile(filePath: string, content: string): Promise<void> {
-        try {
-            await fs.writeFile(filePath, content);
-        }
-        catch (err) {
-            console.log(`Performance-Total error: writeFile failed: ${err}`);
-        }
+export class FileWriter {
+  private static instance: FileWriter;
+  private lock: Promise<void> = Promise.resolve();
+
+  private constructor() {
+  }
+
+  public static getInstance(): FileWriter {
+    if (!FileWriter.instance) {
+      FileWriter.instance = new FileWriter();
     }
 
-    async appendLineToFile(filePath: string, lineContent: string): Promise<void> {
-        try {
-            await fs.appendFile(filePath, lineContent);
-        }
-        catch (err) {
-            console.log(`Performance-Total error: appendFile failed: ${err}`);
-        }
+    return FileWriter.instance;
+  }
+
+  public async readAllLines(path: string): Promise<Array<string>> {
+    let data = "";
+
+    await this.lock;
+
+    try {
+      this.lock = this.lockFile();
+
+      data = await fs.readFile(path, "utf-8");
+    } catch (err) {
+      console.error(`An error occurred while reading file ${path}:`, err);
+    } finally {
+      await this.unlockFile();
     }
 
-    async readAllLines(filePath: string): Promise<Array<string>> {
-        let data = "";
+    const stringArray = data.split("\n");
 
-        try {
-            data = await fs.readFile(filePath, "utf-8");
-        }
-        catch (err) {
-            console.log(`Performance-Total error: readFile failed: ${err}`);
-        }
+    return stringArray;
+  }
 
-        const stringArray = data.split("\n");
+  public async writeToFile(path: string, data: string): Promise<void> {
+    await this.lock;
 
-        return stringArray;
+    try {
+      this.lock = this.lockFile();
+
+      await fs.writeFile(path, data);
+    } catch (err) {
+      console.error(`An error occurred while writing file ${path}:`, err);
+    } finally {
+      await this.unlockFile();
     }
+  }
 
-    async makeDir(dirPath: string): Promise<void> {
-        try {
-            await fs.mkdir(dirPath, {recursive: true});
-        }
-        catch (err) {
-            console.log(`Performance-Total error: can't create dir: ${dirPath}: ${err}`);
-        }
+  public async appendLineToFile(path: string, data: string): Promise<void> {
+    await this.lock;
+
+    try {
+      this.lock = this.lockFile();
+
+      await fs.appendFile(path, data);
+    } catch (err) {
+      console.error(`An error occurred while appending file ${path}:`, err);
+    } finally {
+      await this.unlockFile();
     }
+  }
 
-    async isFileExist(dirPath: string): Promise<boolean> {
-        let isExists = false;
-        try {
-            await fs.access(dirPath);
-            isExists = true;
-        }
-        catch {
-            isExists = false;
-        }
+  public getFilePath(resultsDir: string, fileName: string): string {
+    return path.join(resultsDir, fileName)
+  }
 
-        return isExists;
+  public async createResultsDirIfNotExist(resultsPath?: string): Promise<string> {
+    let npath = "";
+    const root = appRoot.path;
+    let isNotLegal = true;
+
+    if (resultsPath) {
+      isNotLegal = /[*"\[\]:;|,]/g.test(resultsPath);
+
+      npath = path.normalize(resultsPath);
+    };
+
+    const resultsDir = npath == undefined || npath == "" || isNotLegal ? "performance-results" : npath;
+
+    if (!root) {
+      console.error("Performance-Total error: Can't get root folder");
+      return "";
+    };
+
+    const dirPath = path.join(root, resultsDir);
+
+    const isFileExists = await this.isFileExist(dirPath);
+
+    if (!isFileExists) {
+      await this.makeDir(dirPath);
+    };
+
+    return dirPath;
+  }
+
+  private async makeDir(dirPath: string): Promise<void> {
+    try {
+      await fs.mkdir(dirPath, { recursive: true });
     }
+    catch (err: any) {
+      console.error(`Performance-Total error: can't create dir ${dirPath}:`, err);
+    }
+  }
+
+  private async isFileExist(dirPath: string): Promise<boolean> {
+    let isExists = false;
+    
+    try {
+      await fs.access(dirPath);
+      isExists = true;
+    }
+    finally {
+      return isExists;
+    }
+  }
+
+  private async lockFile(): Promise<void> {
+    await this.lock;
+
+    this.lock = new Promise<void>((resolve: () => void) => {
+      setImmediate(resolve);
+    });
+  }
+
+  private async unlockFile(): Promise<void> {
+    await this.lock;
+    this.lock = Promise.resolve();
+  }
 }
-export default new FileWriter();
