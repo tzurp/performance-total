@@ -1,12 +1,15 @@
 import { promises as fs } from 'fs';
 import path from "path";
 import appRoot from "app-root-path";
+import { Plogger } from './logger';
 
 export class FileWriter {
   private static instance: FileWriter;
   private lock: Promise<void> = Promise.resolve();
+  _logger: Plogger;
 
   private constructor() {
+    this._logger = new Plogger();
   }
 
   public static getInstance(): FileWriter {
@@ -26,9 +29,11 @@ export class FileWriter {
       this.lock = this.lockFile();
 
       data = await fs.readFile(path, "utf-8");
-    } catch (err) {
-      console.error(`An error occurred while reading file ${path}:`, err);
-    } finally {
+    } 
+    catch (err) {
+      this._logger.error(`An error occurred while reading file ${path}: ${err}`);
+    }
+    finally {
       await this.unlockFile();
     }
 
@@ -44,9 +49,11 @@ export class FileWriter {
       this.lock = this.lockFile();
 
       await fs.writeFile(path, data);
-    } catch (err) {
-      console.error(`An error occurred while writing file ${path}:`, err);
-    } finally {
+    }
+    catch (err) {
+      this._logger.error(`An error occurred while writing file ${path}: ${err}`);
+    }
+    finally {
       await this.unlockFile();
     }
   }
@@ -58,9 +65,11 @@ export class FileWriter {
       this.lock = this.lockFile();
 
       await fs.appendFile(path, data);
-    } catch (err) {
-      console.error(`An error occurred while appending file ${path}:`, err);
-    } finally {
+    }
+    catch (err) {
+      this._logger.error(`An error occurred while appending file ${path}: ${err}`);
+    }
+    finally {
       await this.unlockFile();
     }
   }
@@ -83,7 +92,8 @@ export class FileWriter {
     const resultsDir = npath == undefined || npath == "" || isNotLegal ? "performance-results" : npath;
 
     if (!root) {
-      console.error("Performance-Total error: Can't get root folder");
+      this._logger.error("Performance-Total error: Can't get root folder");
+
       return "";
     };
 
@@ -103,13 +113,13 @@ export class FileWriter {
       await fs.mkdir(dirPath, { recursive: true });
     }
     catch (err: any) {
-      console.error(`Performance-Total error: can't create dir ${dirPath}:`, err);
+      this._logger.error(`Performance-Total error: can't create dir ${dirPath}: ${err}`);
     }
   }
 
   private async isFileExist(dirPath: string): Promise<boolean> {
     let isExists = false;
-    
+
     try {
       await fs.access(dirPath);
       isExists = true;
