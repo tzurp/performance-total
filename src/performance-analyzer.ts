@@ -1,33 +1,45 @@
 import { PerformanceLogEntry } from "./entities/performance-log-entry";
 import { PerformanceResult } from "./entities/performance-result";
 import calculator from "./helpers/calculator";
-import {FileWriter} from "./helpers/file-writer";
+import { FileWriter } from "./helpers/file-writer";
 import helperMethods from "./helpers/group";
 import ObjectsToCsv from 'objects-to-csv';
+import { Plogger } from "./helpers/logger";
 
 export class PerformanceAnalyzer {
     _performanceResults: Array<PerformanceResult>;
+    _logger: Plogger;
 
     constructor() {
         this._performanceResults = new Array<PerformanceResult>();
+        this._logger = new Plogger();
     }
 
-    async analyze(logFileName: string, saveDataFilePath: string, dropResultsFromFailedTest: boolean | undefined, analyzeByBrowser: boolean | undefined): Promise<void> {
+    async analyze(logFileName: string, saveDataFilePath: string, dropResultsFromFailedTest: boolean | undefined, analyzeByBrowser: boolean | undefined, recentDays: number | undefined): Promise<void> {
         let performanceLogEntries = await this.deserializeData(logFileName);
         let groupedResults: PerformanceLogEntry[][];
 
-        if (dropResultsFromFailedTest) {
-            const entriesWithTestPass = performanceLogEntries.filter((e) => e.isTestPassed == true);
-
-            performanceLogEntries = entriesWithTestPass;
+        if (dropResultsFromFailedTest || recentDays) {
+            const cutoffDate = Date.now() - ((recentDays || 0) * 24 * 60 * 60 * 1000);
+            const filteredEntries = performanceLogEntries.filter((e) => {
+                if (recentDays && e.startTime < cutoffDate) {
+                    return false;
+                }
+                if (dropResultsFromFailedTest) {
+                    return e.isTestPassed;
+                }
+                
+                return true;
+            });
+            performanceLogEntries = filteredEntries;
         }
 
-        if(!performanceLogEntries || performanceLogEntries.length == 0) {
+        if (!performanceLogEntries || performanceLogEntries.length == 0) {
             return;
         }
 
         groupedResults = !analyzeByBrowser ? helperMethods.groupBy(performanceLogEntries, p => [p.name]) : helperMethods.groupBy(performanceLogEntries, p => [p.name, p.brName]);
-        
+
         groupedResults.forEach(group => {
             const durationList = group.map(t => t.duration);
             const performanceResult = new PerformanceResult();
@@ -49,13 +61,13 @@ export class PerformanceAnalyzer {
 
         const picked = this._performanceResults.map(({ name, brName, avgTime, sem, repeats, minValue, maxValue }) => ({ name, brName, avgTime, sem, repeats, minValue, maxValue }));
 
-        console.log("\nPerformance-Total results:\n");
+        this._logger.info("Performance-Total results:");
 
         console.table(picked);
 
         await this.serializeData(saveDataFilePath);
 
-        console.log(`\nPerformance-Total results saved to: ${saveDataFilePath}.csv/json\n`);
+        this._logger.info(`\nPerformance-Total results saved to: ${saveDataFilePath}.csv/json\n`);
     }
 
     private async serializeData(saveDataFilePath: string) {

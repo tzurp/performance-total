@@ -41,7 +41,8 @@ exports.config = {
             performanceResultsFileName: "performance-results",
             dropResultsFromFailedTest: false,
             performanceResultsDirectory: "performance-results",
-            analyzeByBrowser: false
+            analyzeByBrowser: false,
+            recentDays: 0
         }]
       ]
   // ...
@@ -69,6 +70,9 @@ performanceResultsFileName: `performance-results_${new Date().getTime()}`
 <h3>dropResultsFromFailedTest</h3>
 
 Default is `false`. When the value is set to `true`, performance analysis from failed tests would be excluded.
+
+<h3>recentDays</h3>
+To set the number of days to consider for performance analysis set the number of days. Partial days are also supported (e.g. `recentDays: 0.5`)
 
 <h3>performanceResultsDirectory</h3>
 You can override the default path for the results directory in the project's root dir.

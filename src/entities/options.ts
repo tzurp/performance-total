@@ -4,4 +4,5 @@ export interface Options {
     dropResultsFromFailedTest: boolean;
     analyzeByBrowser: boolean;
     performanceResultsDirectory: string;
+    recentDays: number;
 }

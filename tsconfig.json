@@ -7,7 +7,7 @@
             "expect-webdriverio",
             "@wdio/mocha-framework"
         ],
-        "target": "ES6",
+        "target": "ES2021",
         "outDir": "./build",
         "declaration": true,
         "strict": true,
