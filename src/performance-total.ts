@@ -70,7 +70,7 @@ class PerformanceTotal {
      * @param dropResultsFromFailedTest If true - performance analysis will not includ failed tests.
      * @param analyzeByBrowser If true - performance analysis by browser would be
      */
-    async analyzeResults({ performanceResultsFileName, dropResultsFromFailedTest, analyzeByBrowser }: initializeParams): Promise<void> {
+    async analyzeResults({ performanceResultsFileName, dropResultsFromFailedTest, analyzeByBrowser, recentDays }: initializeParams): Promise<void> {
         const analyzer = new PerformanceAnalyzer();
         const fileWriter = FileWriter.getInstance();
         let resultsFileName = this._performanceResultsFileName;
@@ -80,7 +80,7 @@ class PerformanceTotal {
             resultsFileName = performanceResultsFileName;
         }
 
-        await analyzer.analyze(fileWriter.getFilePath(resultsDir, this.logFileName), fileWriter.getFilePath(resultsDir, resultsFileName), dropResultsFromFailedTest, analyzeByBrowser);
+        await analyzer.analyze(fileWriter.getFilePath(resultsDir, this.logFileName), fileWriter.getFilePath(resultsDir, resultsFileName), dropResultsFromFailedTest, analyzeByBrowser, recentDays);
     }
 
 }
@@ -89,5 +89,6 @@ export default new PerformanceTotal();
 interface initializeParams {
     performanceResultsFileName?: string;
     dropResultsFromFailedTest?: boolean;
-    analyzeByBrowser?: boolean
+    analyzeByBrowser?: boolean;
+    recentDays?: number;
 }

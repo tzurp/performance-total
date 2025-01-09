@@ -44,6 +44,6 @@ export default class PerformanceTotalService {
     }
 
     async after(exitCode: any, config: any, capabilities: any) {
-        await performanceTotal.analyzeResults({performanceResultsFileName: this._serviceOptions.performanceResultsFileName, dropResultsFromFailedTest: this._serviceOptions.dropResultsFromFailedTest, analyzeByBrowser: this._serviceOptions.analyzeByBrowser});
+        await performanceTotal.analyzeResults({performanceResultsFileName: this._serviceOptions.performanceResultsFileName, dropResultsFromFailedTest: this._serviceOptions.dropResultsFromFailedTest, analyzeByBrowser: this._serviceOptions.analyzeByBrowser, recentDays: this._serviceOptions.recentDays});
     }
 }
