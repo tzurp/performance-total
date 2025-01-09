@@ -92,7 +92,7 @@ export class FileWriter {
     const resultsDir = npath == undefined || npath == "" || isNotLegal ? "performance-results" : npath;
 
     if (!root) {
-      this._logger.error("Performance-Total error: Can't get root folder");
+      this._logger.error("Can't get root folder");
 
       return "";
     };
@@ -113,7 +113,7 @@ export class FileWriter {
       await fs.mkdir(dirPath, { recursive: true });
     }
     catch (err: any) {
-      this._logger.error(`Performance-Total error: can't create dir ${dirPath}: ${err}`);
+      this._logger.error(`can't create directory ${dirPath}: ${err}`);
     }
   }
 
