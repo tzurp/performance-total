@@ -1,6 +1,5 @@
 import { promises as fs } from 'fs';
 import path from "path";
-import appRoot from "app-root-path";
 import { Plogger } from './logger';
 
 export class FileWriter {
@@ -29,7 +28,7 @@ export class FileWriter {
       this.lock = this.lockFile();
 
       data = await fs.readFile(path, "utf-8");
-    } 
+    }
     catch (err) {
       this._logger.error(`An error occurred while reading file ${path}: ${err}`);
     }
@@ -78,26 +77,9 @@ export class FileWriter {
     return path.join(resultsDir, fileName)
   }
 
-  public async createResultsDirIfNotExist(resultsPath?: string): Promise<string> {
-    let npath = "";
-    const root = appRoot.path;
-    let isNotLegal = true;
+  public async createResultsDirIfNotExist(resultsPath: string): Promise<string> {
 
-    if (resultsPath) {
-      isNotLegal = /[*"\[\]:;|,]/g.test(resultsPath);
-
-      npath = path.normalize(resultsPath);
-    };
-
-    const resultsDir = npath == undefined || npath == "" || isNotLegal ? "performance-results" : npath;
-
-    if (!root) {
-      this._logger.error("Can't get root folder");
-
-      return "";
-    };
-
-    const dirPath = path.join(root, resultsDir);
+    const dirPath = path.dirname(resultsPath);
 
     const isFileExists = await this.isFileExist(dirPath);
 
@@ -106,6 +88,37 @@ export class FileWriter {
     };
 
     return dirPath;
+  }
+
+  public async getFiles(dirPath: string): Promise<string[]> {
+    try {
+      const files = await fs.readdir(dirPath);
+
+      return files.map((file) => path.join(dirPath, file));
+    }
+    catch (err) {
+      this._logger.error(`An error occurred while reading files from directory ${dirPath}: ${err}`);
+
+      return [];
+    }
+  }
+
+  async isFile(path: string): Promise<boolean> {
+    try {
+      const stat = await fs.stat(path);
+      if (stat.isFile()) {
+        return true;
+      }
+      else if (stat.isDirectory()) {
+        return false;
+      }
+      else {
+        throw new Error(`The path ${path} is not a file or directory`);
+      }
+    }
+    catch (error) {
+      throw new Error(`Error accessing path: ${path}: ${error}`);
+    }
   }
 
   private async makeDir(dirPath: string): Promise<void> {

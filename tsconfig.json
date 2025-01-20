@@ -3,12 +3,10 @@
         "module": "CommonJS",
         "types": [
             "node",
-            "@wdio/globals/types",
-            "expect-webdriverio",
-            "@wdio/mocha-framework"
         ],
         "target": "ES2021",
         "outDir": "./build",
+        "rootDir": "./src",
         "declaration": true,
         "strict": true,
         "esModuleInterop": true,
@@ -17,8 +15,6 @@
     },
     "include": [
         "src/**/*",
-        "test/specs/**/*",
-        "app.ts",
-        "dev-dep"
-      ]
+        "src/index.ts"
+    ]
 }
