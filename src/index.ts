@@ -8,7 +8,7 @@ async function main() {
     const [logFileName, destinationDir, ...restArgs] = argv;
 
     if (!logFileName || !destinationDir) {
-        console.error("Error: Two mandatory arguments are required (e.g. performancetotal-cli path/to/source/directory path/to/result/directory");
+        console.error("Error: Two mandatory arguments are required (e.g. performancetotal-cli path/to/source/directory path/to/result/directory)");
         process.exit(1);
     }
     const dropFailedResults = restArgs.includes('drop-failed-results')? true:false;
