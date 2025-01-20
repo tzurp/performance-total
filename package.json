@@ -10,7 +10,8 @@
   ],
   "scripts": {},
   "keywords": [
-    "performance"
+    "performance",
+    "cli"
   ],
   "author": "Tzur Paldi",
   "license": "ISC",
