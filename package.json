@@ -1,6 +1,6 @@
 {
   "name": "performancetotal-cli",
-  "version": "0.0.6-0",
+  "version": "0.1.0",
   "description": "performance-total cli analyzer",
   "bin": {
     "performancetotal-cli": "./build/index.js"
