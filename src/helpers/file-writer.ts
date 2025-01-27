@@ -157,7 +157,9 @@ export class FileWriter {
 
   async getPackageVersion(): Promise<string> {
     try {
-      const data = await fs.readFile('package.json', 'utf-8');
+      const twoLevelsUp = path.join(__dirname, '..', '..');
+      const packagePath = path.resolve(twoLevelsUp, 'package.json');
+      const data = await fs.readFile(packagePath, 'utf-8');
       const packageJson = JSON.parse(data);
       return packageJson.version;
     } catch (error) {
