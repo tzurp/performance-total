@@ -154,4 +154,16 @@ export class FileWriter {
     await this.lock;
     this.lock = Promise.resolve();
   }
+
+  async getPackageVersion(): Promise<string> {
+    try {
+      const data = await fs.readFile('package.json', 'utf-8');
+      const packageJson = JSON.parse(data);
+      return packageJson.version;
+    } catch (error) {
+      console.error('Error reading package.json:', error);
+      throw error;
+    }
+  }
+
 }

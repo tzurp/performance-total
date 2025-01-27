@@ -10,7 +10,7 @@ If you’re using the Performance-total plugin for Playwright, Pytest, or Webdri
 
 Install the app globally using the following command:
 
-```
+```sh
 npm install -g performancetotal-cli
 ```
 
@@ -22,43 +22,50 @@ There are two mandatory parameters for `performancetotal-cli`:
 
 2. **Destination Path**: The absolute path to the destination directory where the results will be saved.
 
-```
+```sh
 performancetotal-cli path/to/performance-log.txt path/to/result/directory
 ```
 
 or
 
-```
+```sh
 performancetotal-cli path/to/source/directory path/to/result/directory
 ```
 
-## Options
+### Options
 
+#### --help
 
-### drop-failed-results
+Displays the help message with usage instructions and options.
 
-Default is `false`. When the option is used, performance analysis from failed tests would be excluded.
-
-```
-performancetotal-cli path/to/performance-log.txt path/to/result/directory/ drop-failed-results
-```
-
-### recent-days
-
-Default is `0` (no limit). To set the number of days to consider for performance analysis, set the number of days.
-
-```
-performancetotal-cli path/to/performance-log.txt path/to/result/directory/ recent-days=3
+```sh
+performancetotal-cli --help
 ```
 
-Please note that partial days are also supported (e.g. `recent-days=0.5`)
+#### --drop-failed-results
 
-### analyze-by-browser
+Default is `off`. When the option is used, performance analysis from failed tests would be excluded.
 
-Default is `false`. If used, the performance data would be analyzed also by the browser type.
-
+```sh
+performancetotal-cli path/to/performance-log.txt path/to/result/directory/ --drop-failed-results
 ```
-performancetotal-cli path/to/performance-log.txt path/to/result/directory/ analyze-by-browser
+
+#### --recent-days
+
+Default value is `0` (no limit). To set the number of days to consider for performance analysis, set the number of days.
+
+```sh
+performancetotal-cli path/to/performance-log.txt path/to/result/directory/ --recent-days=3
+```
+
+Please note that partial days are also supported (e.g. `--recent-days=0.5`)
+
+#### --analyze-by-browser
+
+Default is `off`. If used, the performance data would be analyzed also by the browser type.
+
+```sh
+performancetotal-cli path/to/performance-log.txt path/to/result/directory/ --analyze-by-browser
 ```
 
 ## Getting the results
