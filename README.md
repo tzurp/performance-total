@@ -51,9 +51,9 @@ exports.config = {
 };
 ```
 
-## Options
+### Options
 
-### disableAppendToExistingFile
+#### __disableAppendToExistingFile__
 
 When set to `true`, new test runs will start fresh and overwrite any existing performance data.
 When set to `false` (default), performance data will be added to the existing data.
@@ -62,9 +62,9 @@ When set to `false` (default), performance data will be added to the existing da
 >
 > This action will delete all your performance data permanently. Ensure that you have a backup before proceeding.
 
-### performanceResultsFileName
+#### __performanceResultsFileName__
 
-You can set the default results file name (`performance-results`).
+You can override the default results file name (`performance-results`).
 A newly created results file normally overwrites the old file. If you want to keep old files, it is recommended to add a timestamp to the file name. For example:
 
 ```typescript
@@ -73,31 +73,31 @@ performanceResultsFileName: `performance-results_${new Date().getTime()}`
 ...
 ```
 
-### dropResultsFromFailedTest
+#### __dropResultsFromFailedTest__
 
 Default is `false`. When the value is set to `true`, performance analysis from failed tests would be excluded.
 
-### recentDays
+#### __recentDays__
 
 Default is `0` (no limit). To set the number of days to consider for performance analysis set the number of days. Partial days are also supported (e.g. `recentDays: 0.5`)
 
-### performanceResultsDirectory
+#### __performanceResultsDirectory__
 
 You can override the default path for the results directory in the project's root dir.
 For example:
 
-```
+```typescript
 ...
-performanceResultsFileName: "results-dir/performance-total-results"
+performanceResultsDirectory: "results-dir/performance-total-results"
 ...
 ```
 
-### analyzeByBrowser
+#### __analyzeByBrowser__
 
 Default is `false`. If `true`, the performance data would be analyzed also by the browser type.
 
 
-## Usage in test
+### Usage in test
 
 Just import __performancetotal__ where you need it, whether it be in your test file or any other class. This object provides methods for measuring performance data in your tests, including sampleStart and sampleEnd for starting and ending performance measurements.
 Here's an example of how you might use the performancetotal object to measure the startup performance of two websites:
@@ -142,6 +142,10 @@ const sampleTime = performancetotal.getSampleTime(sampleName);
 ## Getting the results
 
 When all the tests are completed, a new results directory is created in your project's root folder (the default directory name is performance-results). Inside this directory, two files are created: performance-results.json and performance-results.csv. These files contain analyzed data for each sample, including the average time, standard error of mean (SEM), number of samples, minimum value, maximum value, earliest time, and latest time. You can use this data to identify any performance regressions or improvements over time.
+
+### Analyzing performance data in bulk
+
+To analyze existing performance data in bulk without generating new tests, it is recommended to use the [__performancetotal-cli__ tool](https://www.npmjs.com/package/performancetotal-cli).
 
 ## Typescript support
 
