@@ -20,6 +20,14 @@
   ],
   "author": "Tzur Paldi",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tzurp/performance-total.git"
+  },
+  "homepage": "https://github.com/tzurp/performance-total#readme",
+  "bugs": {
+    "url": "https://github.com/tzurp/performance-total/issues"
+  },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
     "@types/node": "^22.10.5",
