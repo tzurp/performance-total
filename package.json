@@ -1,6 +1,6 @@
 {
   "name": "wdio-performancetotal-service",
-  "version": "4.0.4",
+  "version": "4.0.3",
   "description": "WebdriverIO service for analyzing test flow performance",
   "main": "build/app.js",
   "types": "build/app.d.ts",
@@ -20,14 +20,6 @@
   ],
   "author": "Tzur Paldi",
   "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tzurp/performance-total.git"
-  },
-  "homepage": "https://github.com/tzurp/performance-total#readme",
-  "bugs": {
-    "url": "https://github.com/tzurp/performance-total/issues"
-  },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
     "@types/node": "^22.10.5",
