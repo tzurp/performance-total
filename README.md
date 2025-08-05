@@ -154,3 +154,5 @@ Typescript is supported for this plugin.
 ## Support
 
 For support and suggestions, feel free to contact me at [tzur.paldi@outlook.com](mailto:tzur.paldi@outlook.com).
+
+📬 Maintained by [Tzur Paldi](https://github.com/tzurp) — explore my GitHub profile for more tools.
